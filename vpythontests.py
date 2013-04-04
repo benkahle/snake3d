@@ -10,7 +10,7 @@ snake.origin = (0,0,0)
 scene.autoscale = False
 #counter = 0
 def check_dir(snake):
-    if scene.kb.keys: # is there an event waiting to be processed?
+    if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
         key = scene.kb.getkey() # obtain keyboard information
         if key == 'left':
             snake.v[0]=-1
@@ -53,3 +53,5 @@ def one_tick(snake):
 
 while 1:
     one_tick(snake)
+
+# HI GUYS!
