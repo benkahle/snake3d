@@ -13,29 +13,17 @@ def check_dir(snake):
     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
         key = scene.kb.getkey() # obtain keyboard information
         if key == 'left':
-            snake.v[0]=-1
-            snake.v[1]=0
-            snake.v[2]=0
+            snake.v=vector(-1,0,0)
         if key == 'right':
-            snake.v[0]=1
-            snake.v[1]=0
-            snake.v[2]=0
+            snake.v=vector(1,0,0)
         if key == 'up':
-            snake.v[1]=1
-            snake.v[0]=0
-            snake.v[2]=0
+            snake.v=vector(0,1,0)
         if key == 'down':
-            snake.v[1]=-1
-            snake.v[0]=0
-            snake.v[2]=0
+            snake.v=vector(0,-1,0)
         if key == 'w':
-            snake.v[2]=1
-            snake.v[0]=0
-            snake.v[1]=0
+            snake.v=vector(0,0,1)
         if key == 's':
-            snake.v[2]=-1
-            snake.v[0]=0
-            snake.v[1]=0
+            snake.v=vector(0,0,-1)
 def check_wall(snake):
     if snake.pos[0]<= -100 or snake.pos[0]>= 100:
         return False
