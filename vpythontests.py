@@ -7,6 +7,7 @@ border = curve(pos=[(-100,-100,100),(100,-100,100),(100,-100,-100),(100,100,-100
 snake = box(pos=(6,0,0), length=4, width=4, height=4, color=color.red)
 snake.v = vector(0,0,0)
 snake.origin = (0,0,0)
+zbox = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
 scene.autoscale = False
 #counter = 0
 def check_dir(snake):
@@ -30,9 +31,12 @@ def check_wall(snake):
     elif snake.pos[1]<= -100 or snake.pos[1]>= 100:
         return False
     else: return True
+def zboxmove(snake):
+    zbox.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
 def one_tick(snake):
     if check_wall(snake):
         check_dir(snake)
+        zboxmove(snake)
         snake.pos += snake.v*dt
     else:
         pass
@@ -43,3 +47,4 @@ while 1:
     one_tick(snake)
 
 # HI GUYS!
+# hey Ben
