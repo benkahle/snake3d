@@ -2,7 +2,7 @@ SofDes Project Proposal
 Jamie Gorson, Cullen Ross, Ben Kahle, Cameron Anderson
 4/3/13
 
-Mega-super Snake Game
+						Mega-super Snake Game
 
 For our software design final project, we would like to create an advanced version of the classic 'Snake' arcade game. We intend to use Visual Python to make a 3-d snake game which incorporates some or all of the following characteristics along with classic 'Snake' gameplay: powerups and obstacles that benefit/detriment players, creative use and shifting of camera angles (eg from third-person to first-person and back during gameplay), a 'duel' mode in which two or more snakes compete, interesting graphic design, and networking for multi-computer competitive play. 
 
