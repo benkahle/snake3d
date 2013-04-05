@@ -1,5 +1,8 @@
 from visual import *
 import random
+import sys
+import os
+import time
 
 class Foodbox(object):
     def __init__(self):
@@ -10,26 +13,34 @@ class Timestep(object):
 
 dt = Timestep()
 dt.timestep=0.01
-
-#scene = display(title='Super-Mega Snake Game')
-scene.exit=1
+scene = display(title='Super-Mega Snake Game', width=750, height=750)
+welcome = label(text='Welcome to Super-Mega Snake Game!\nX and Y axes are controlled with the arrow keys.\nZ axis is controlled by W and S.\nPress any direction to start.', align='center',pos=(0,0,0))
 border = curve(pos=[(-100,-100,100),(100,-100,100),(100,-100,-100),(100,100,-100),(-100,100,-100),(-100,100,100),(-100,-100,100),(-100,-100,-100),(-100,100,-100),(-100,-100,-100),(100,-100,-100),(100,-100,100),(100,100,100),(100,100,-100),(100,100,100),(-100,100,100)])
-#grid1 = curve(pos=[(-100,-100,z)])
+scene.autoscale = False
 snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
+welcomebox=box(pos=(0,0,100), length=1000, height=150, color=color.black)
 snake.v = vector(0,0,0)
 zbox = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
-scene.autoscale = False
+
 foodbox=Foodbox()
 food = box(pos=(random.randint(-96,96),random.randint(-96,96),random.randint(-96,96)), length=2, width=2, height=2, color=color.cyan)
 foodbox.food.append(food)
 foodsquare = curve(pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])], color = color.green)
 
 #counter = 0
+def restart_program():
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
+
 def randpos(thingy):
     thingy.pos=(random.randint(-98,98),random.randint(-98,98),random.randint(-98,98))
 def check_dir(snake):
     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
+        welcome.visible=0
+        welcomebox.visible=0
         key = scene.kb.getkey() # obtain keyboard information
+        if key == 'q':
+            quit()
         if key == 'left':
             snake.v=vector(-1,0,0)
         if key == 'right':
@@ -72,7 +83,7 @@ def end():
     while x:
         key = scene.kb.getkey() # obtain keyboard information 
         if key == 'p':
-            play()   
+            restart_program()   
         if key!=0:
             x=False        
 def play():
@@ -81,4 +92,5 @@ def play():
     end()
 
 play()
+
 
