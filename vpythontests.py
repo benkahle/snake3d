@@ -66,6 +66,12 @@ def check_wall(snake):
     elif snake.pos[2]<= -100 or snake.pos[2]>= 100:
         return False
     else: return True
+def check_snake(snake, countbits):
+    n =2
+    for i in bit_objects:
+        if abs(snake.pos[0] - i.pos[0])<=n and abs(snake.pos[1] - i.pos[1])<=n and abs(snake.pos[2] - i.pos[2])<=n:
+            return False
+    return True
 def zboxmove(snake):
     zbox.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
 def checkfood():
@@ -117,9 +123,9 @@ def end():
         if key == 'p':
             restart_program()          
 def play():
-    while check_wall(snake):
+    while check_wall(snake) and check_snake(snake, countbits):
         one_tick(snake)
-        centerspot.centerspot(snake,scene,snake.v)
+        #centerspot.centerspot(snake,scene,snake.v)
     end()
 
 play()
