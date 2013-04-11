@@ -1,4 +1,8 @@
-def centerspot(snake):
+def centerspot(snake,scene,snakev):
+    try:
+        scene.forward=(snake.pos[0],snake.pos[1],snake.pos[2])
+    except ValueError:
+        pass
     if snake.v[0]==0 and snake.v[1] == 0:
         if snake.v[2] > 0:
             scene.center = (snake.pos[0],snake.pos[1],snake.pos[2] + 1)
