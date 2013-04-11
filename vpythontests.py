@@ -3,6 +3,7 @@ import random
 import sys
 import os
 import time
+import centerspot
 
 class Foodbox(object):
     def __init__(self):
@@ -118,6 +119,7 @@ def end():
 def play():
     while check_wall(snake):
         one_tick(snake)
+        centerspot.centerspot(snake,scene,snake.v)
     end()
 
 play()
