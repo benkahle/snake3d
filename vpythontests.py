@@ -8,8 +8,15 @@ class Foodbox(object):
     def __init__(self):
         self.food=[]
 
+#initial parameters
 dt = 0.01
 velocity=1
+
+#creating game environment and welcome menu
+tickcount=0
+countbits=0
+headlog=[]
+snakeybits=[]
 scene = display(title='Super-Mega Snake Game', width=750, height=750)
 welcome = label(text='Welcome to Super-Mega Snake Game!\nX and Y axes are controlled with the arrow keys.\nZ axis is controlled by W and S.\nPress any direction to start.', align='center',pos=(0,0,0))
 border = curve(pos=[(-100,-100,100),(100,-100,100),(100,-100,-100),(100,100,-100),(-100,100,-100),(-100,100,100),(-100,-100,100),(-100,-100,-100),(-100,100,-100),(-100,-100,-100),(100,-100,-100),(100,-100,100),(100,100,100),(100,100,-100),(100,100,100),(-100,100,100)])
@@ -19,6 +26,7 @@ welcomebox=box(pos=(0,0,100), length=1000, height=150, color=color.black)
 snake.v = vector(0,0,0)
 zbox = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
 
+#creating food
 foodbox=Foodbox()
 food = box(pos=(random.randint(-96,96),random.randint(-96,96),random.randint(-96,96)), length=2, width=2, height=2, color=color.cyan)
 foodbox.food.append(food)
@@ -28,8 +36,9 @@ def restart_program():
     python = sys.executable
     os.execl(python, python, * sys.argv)
 
-def randpos(thingy):
-    thingy.pos=(random.randint(-98,98),random.randint(-98,98),random.randint(-98,98))
+def randpos(food):
+    food.pos=(random.randint(-98,98),random.randint(-98,98),random.randint(-98,98))
+
 def check_dir(snake):
     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
         welcome.visible=0
@@ -58,19 +67,34 @@ def check_wall(snake):
 def zboxmove(snake):
     zbox.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
 def checkfood():
+    global countbits
     global velocity 
+    global snakepos
     n=3
     for food in foodbox.food:
         if abs(snake.pos[0]-food.pos[0])<=n and abs(snake.pos[1]-food.pos[1])<=n and abs(snake.pos[2]-food.pos[2])<=n:
             randpos(food)
             foodsquare.pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])]
-            velocity+=0.05
+            countbits+=1
+            snakeybits.append(str(countbits))
+
+def makesnake(snakeybits):
+    for item in snakeybits:
+        item=box(pos=headlog[-int(item)], length=4, width=4, height=4, color=color.red)
+
 def one_tick(snake):
-#    if check_wall(snake):
+    global tickcount
+    global headlog
+    global snakeybits
     checkfood()
+    makesnake(snakeybits)
     check_dir(snake)
     zboxmove(snake)
+    if tickcount%400==0:
+        headlog.append(tuple(snake.pos))
     snake.pos += snake.v*dt
+    tickcount+=1
+    return tickcount and headlog
 def end(): 
     endtext = label(text='Game Over!', align='center',pos=[0,0,0], height = 30, color=color.red)
     options = label(text = 'Press P to play again', align = 'center', pos = [0,-50], color=color.yellow, height=10)
