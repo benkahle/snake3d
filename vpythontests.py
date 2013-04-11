@@ -46,17 +46,17 @@ def check_dir(snake):
         welcome.visible=0
         welcomebox.visible=0
         key = scene.kb.getkey() # obtain keyboard information
-        if key == 'left':
+        if key == 'left' and snake.v!=vector(velocity,0,0):
             snake.v=vector(-velocity,0,0)
-        if key == 'right':
+        if key == 'right' and snake.v!=vector(-velocity,0,0):
             snake.v=vector(velocity,0,0)
-        if key == 'up':
+        if key == 'up' and snake.v!=vector(0, -velocity, 0):
             snake.v=vector(0,velocity,0)
-        if key == 'down':
+        if key == 'down' and snake.v!=vector(0, velocity,0):
             snake.v=vector(0,-velocity,0)
-        if key == 's':
+        if key == 's' and snake.v!=vector(0,0, -velocity):
             snake.v=vector(0,0,velocity)
-        if key == 'w':
+        if key == 'w' and snake.v!=vector(0,0, velocity):
             snake.v=vector(0,0,-velocity)
 def check_wall(snake):
     if snake.pos[0]<= -100 or snake.pos[0]>= 100:
@@ -90,7 +90,7 @@ def checkfood():
 #             item=box(pos=headlog[-int(item)], length=4, width=4, height=4, color=color.red)
 #             bit_objects.append(item)
 def move_bits(bit_objects):
-    print(bit_objects)
+    #print(bit_objects)
     for thing in bit_objects:
         thing.pos = headlog[-(bit_objects.index(thing)+1)*400]
 def one_tick(snake):
