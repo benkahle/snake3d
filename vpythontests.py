@@ -88,15 +88,7 @@ def checkfood():
             item=box(pos=headlog[-400*int(countbits)], length=4, width=4, height=4, color=color.red)
             bit_objects.append(item)
 
-
-
-# def makesnake(snakeybits):
-#     for item in snakeybits:
-#         if not item:
-#             item=box(pos=headlog[-int(item)], length=4, width=4, height=4, color=color.red)
-#             bit_objects.append(item)
 def move_bits(bit_objects):
-    #print(bit_objects)
     for thing in bit_objects:
         thing.pos = headlog[-(bit_objects.index(thing)+1)*400]
 def one_tick(snake):
@@ -104,11 +96,9 @@ def one_tick(snake):
     global headlog
     global snakeybits
     checkfood()
-   #s makesnake(snakeybits)
     move_bits(bit_objects)
     check_dir(snake)
     zboxmove(snake)
-#    if tickcount%400==0:
     headlog.append(tuple(snake.pos))
     snake.pos += snake.v*dt
     tickcount+=1
