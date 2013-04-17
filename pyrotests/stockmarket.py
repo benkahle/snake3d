@@ -42,7 +42,7 @@ def main():
     nasdaq=StockMarket("NASDAQ", ["AAPL", "CSCO", "MSFT", "GOOG"])
     newyork=StockMarket("NYSE", ["IBM", "HPQ", "BP"])
 
-    Pyro4.config.HOST='192.168.134.142'
+    Pyro4.config.HOST='192.168.134.147'
     daemon=Pyro4.Daemon()
     nasdaq_uri=daemon.register(nasdaq)
     newyork_uri=daemon.register(newyork)
