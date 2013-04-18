@@ -26,13 +26,17 @@ scene.autoscale = False
 snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
 welcomebox=box(pos=(0,0,100), length=1000, height=150, color=color.black)
 snake.v = vector(0,0,0)
-zbox = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
+zboxs = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
+yboxs = curve(pos = [(-100,snake.pos[1],-100),(100,snake.pos[1],-100),(100,snake.pos[1],100),(-100,snake.pos[1],100),(-100,snake.pos[1],-100)], color = color.yellow)
+lamp = local_light(pos=snake.pos, color=color.yellow)
 
 #creating food
 foodbox=Foodbox()
 food = box(pos=(random.randint(-96,96),random.randint(-96,96),random.randint(-96,96)), length=2, width=2, height=2, color=color.cyan)
 foodbox.food.append(food)
-foodsquare = curve(pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])], color = color.green)
+foodsquare1 = curve(pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])], color = color.green)
+foodsquare2 = curve(pos = [(-100,food.pos[1],-100),(100,food.pos[1],-100),(100,food.pos[1],100),(-100,food.pos[1],100),(-100,food.pos[1],-100)], color = color.green)
+
 
 def restart_program():
     python = sys.executable
@@ -59,11 +63,11 @@ def check_dir(snake):
         if key == 'w' and snake.v!=vector(0,0, velocity):
             snake.v=vector(0,0,-velocity)
 def check_wall(snake):
-    if snake.pos[0]<= -100 or snake.pos[0]>= 100:
+    if snake.pos[0]<= -98 or snake.pos[0]>= 98:
         return False
-    elif snake.pos[1]<= -100 or snake.pos[1]>= 100:
+    elif snake.pos[1]<= -98 or snake.pos[1]>= 98:
         return False
-    elif snake.pos[2]<= -100 or snake.pos[2]>= 100:
+    elif snake.pos[2]<= -98 or snake.pos[2]>= 98:
         return False
     else: return True
 def check_snake(snake, countbits):
@@ -73,7 +77,8 @@ def check_snake(snake, countbits):
             return False
     return True
 def zboxmove(snake):
-    zbox.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
+    zboxs.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
+    yboxs.pos = [(-100,snake.pos[1],-100),(100,snake.pos[1],-100),(100,snake.pos[1],100),(-100,snake.pos[1],100),(-100,snake.pos[1],-100)]
 def checkfood():
     global countbits
     global velocity 
@@ -82,7 +87,8 @@ def checkfood():
     for food in foodbox.food:
         if abs(snake.pos[0]-food.pos[0])<=n and abs(snake.pos[1]-food.pos[1])<=n and abs(snake.pos[2]-food.pos[2])<=n:
             randpos(food)
-            foodsquare.pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])]
+            foodsquare1.pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])]
+            foodsquare2.pos = [(-100,food.pos[1],-100),(100,food.pos[1],-100),(100,food.pos[1],100),(-100,food.pos[1],100),(-100,food.pos[1],-100)]
             countbits+=1
             snakeybits.append(str(countbits))
             item=box(pos=headlog[-400*int(countbits)], length=4, width=4, height=4, color=color.red)
@@ -101,9 +107,11 @@ def one_tick(snake):
     zboxmove(snake)
     headlog.append(tuple(snake.pos))
     snake.pos += snake.v*dt
+    lamp.pos=snake.pos+vector(0,0,1)
     tickcount+=1
     return tickcount and headlog
 def end(): 
+    scene.autoscale=True
     endtext = label(text='Game Over!', align='center',pos=[0,0,0], height = 30, color=color.red)
     options = label(text = 'Press P to play again', align = 'center', pos = [0,-50], color=color.yellow, height=10)
     x = True
@@ -115,7 +123,7 @@ def end():
 def play():
     while check_wall(snake) and check_snake(snake, countbits):
         one_tick(snake)
-        #centerspot.centerspot(snake,scene,snake.v)
+        centerspot.centerspot(snake,scene,snake.v)
     end()
 
 play()
