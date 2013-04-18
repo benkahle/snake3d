@@ -30,7 +30,8 @@ snake2.v = vector(0,0,0)
 foodbox=Foodbox()
 food = box(pos=(random.randint(-96,96),random.randint(-96,96),random.randint(-96,96)), length=2, width=2, height=2, color=color.cyan)
 foodbox.food.append(food)
-foodsquare = curve(pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])], color = color.green)
+foodsquare1 = curve(pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])], color = color.green)
+foodsquare2 = curve(pos = [(-100,food.pos[1],-100),(100,food.pos[1],-100),(100,food.pos[1],100),(-100,food.pos[1],100),(-100,food.pos[1],-100)], color = color.green)
 
 def restart_program():
     python = sys.executable
@@ -94,8 +95,9 @@ def check_head(snake, snake2):
         return False
     return True
 
-def zboxmove(snake, zbox):
+def zboxmove(snake, zbox, ybox):
     zbox.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
+    ybox.pos = [(-100,snake.pos[1],-100),(100,snake.pos[1],-100),(100,snake.pos[1],100),(-100,snake.pos[1],100),(-100,snake.pos[1],-100)]
 def checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects,cala):
     # global countbits
     # global velocity 
@@ -104,7 +106,8 @@ def checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects,cala)
     for food in foodbox.food:
         if abs(snake.pos[0]-food.pos[0])<=n and abs(snake.pos[1]-food.pos[1])<=n and abs(snake.pos[2]-food.pos[2])<=n:
             randpos(food)
-            foodsquare.pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])]
+            foodsquare1.pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])]
+            foodsquare2.pos = [(-100,food.pos[1],-100),(100,food.pos[1],-100),(100,food.pos[1],100),(-100,food.pos[1],100),(-100,food.pos[1],-100)]
             countbits+=1
             snakeybits.append(str(countbits))
             item=box(pos=headlog[-200*int(countbits)], length=4, width=4, height=4, color=snake.color)
@@ -114,26 +117,26 @@ def checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects,cala)
 def move_bits(bit_objects, headlog):
     for thing in bit_objects:
         thing.pos = headlog[-(bit_objects.index(thing)+1)*200]
-def one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objects, zbox):
+def one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objects, zbox, ybox):
     # global tickcount
     # global headlog
     # global snakeybits
     checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects, 'magenta')
     move_bits(bit_objects, headlog)
     check_dir(snake, snake2)
-    zboxmove(snake, zbox)
+    zboxmove(snake, zbox, ybox)
     headlog.append(tuple(snake.pos))
     snake.pos += snake.v*dt
     tickcount+=1
     return tickcount and headlog
-def one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2):
+def one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2, ybox2):
     # global tickcount
     # global headlog
     # global snakeybits
     checkfood(snake2, velocity, countbits2, snakeybits2, headlog2, bit_objects2, 'yellow')
     move_bits(bit_objects2, headlog2)
     check_dir(snake, snake2)
-    zboxmove(snake2, zbox2)
+    zboxmove(snake2, zbox2, ybox2)
     headlog2.append(tuple(snake2.pos))
     snake2.pos += snake2.v*dt
     tickcount2+=1
@@ -160,8 +163,12 @@ def play():
     snakeybits2 = []
     bit_objects = []
     bit_objects2 = []
+    # zbox = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.magenta)
+    # zbox2 = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
     zbox = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.magenta)
-    zbox2 = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
+    ybox = curve(pos = [(-100,snake.pos[1],-100),(100,snake.pos[1],-100),(100,snake.pos[1],100),(-100,snake.pos[1],100),(-100,snake.pos[1],-100)], color = color.magenta)   
+    zbox2 = curve(pos = [(-100,-100,snake2.pos[2]),(100,-100,snake2.pos[2]),(100,100,snake2.pos[2]),(-100,100,snake2.pos[2]),(-100,-100,snake2.pos[2])], color = color.yellow)
+    ybox2 = curve(pos = [(-100,snake2.pos[1],-100),(100,snake2.pos[1],-100),(100,snake2.pos[1],100),(-100,snake2.pos[1],100),(-100,snake2.pos[1],-100)], color = color.yellow)   
 
     while check_wall(snake) and check_snake(snake, countbits, bit_objects) and check_wall(snake2) and check_snake(snake2, countbits2, bit_objects2) and check_snake(snake, countbits2, bit_objects2) and check_snake(snake2, countbits, bit_objects) and check_head(snake, snake2):
         # if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
@@ -173,8 +180,8 @@ def play():
         #     print('hi')
         #     check_dir2(snake2)
         # else:
-        one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objects, zbox)
-        one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2)
+        one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objects, zbox, ybox)
+        one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2, ybox2)
         #centerspot.centerspot(snake,scene,snake.v)
     if not check_wall(snake) or not check_snake(snake, countbits, bit_objects) or not check_snake(snake, countbits2, bit_objects2):
         win = 'Player TWO Won!'
