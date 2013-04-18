@@ -57,11 +57,6 @@ def check_dir(snake, snake2):
             snake.v=vector(0,0,velocity)
         if key == 'o' and snake.v!=vector(0,0, velocity):
             snake.v=vector(0,0,-velocity)
-# def check_dir2(snake):
-#     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
-#         welcome.visible=0
-#         welcomebox.visible=0
-#         key = scene.kb.getkey() # obtain keyboard information
         if key == 'a' and snake2.v!=vector(velocity,0,0):
             snake2.v=vector(-velocity,0,0)
         if key == 'd' and snake2.v!=vector(-velocity,0,0):
