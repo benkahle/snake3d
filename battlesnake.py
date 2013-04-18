@@ -10,7 +10,7 @@ class Foodbox(object):
         self.food=[]
 
 #initial parameters
-dt = 0.01
+dt = 0.020
 velocity=1
 
 #creating game environment and welcome menu
@@ -39,7 +39,7 @@ def restart_program():
 def randpos(food):
     food.pos=(random.randint(-98,98),random.randint(-98,98),random.randint(-98,98))
 
-def check_dir(snake):
+def check_dir(snake, snake2):
     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
         welcome.visible=0
         welcomebox.visible=0
@@ -56,23 +56,23 @@ def check_dir(snake):
             snake.v=vector(0,0,velocity)
         if key == 'o' and snake.v!=vector(0,0, velocity):
             snake.v=vector(0,0,-velocity)
-def check_dir2(snake):
-    if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
-        welcome.visible=0
-        welcomebox.visible=0
-        key = scene.kb.getkey() # obtain keyboard information
-        if key == 'a' and snake.v!=vector(velocity,0,0):
-            snake.v=vector(-velocity,0,0)
-        if key == 'd' and snake.v!=vector(-velocity,0,0):
-            snake.v=vector(velocity,0,0)
-        if key == 'w' and snake.v!=vector(0, -velocity, 0):
-            snake.v=vector(0,velocity,0)
-        if key == 's' and snake.v!=vector(0, velocity,0):
-            snake.v=vector(0,-velocity,0)
-        if key == 'f' and snake.v!=vector(0,0, -velocity):
-            snake.v=vector(0,0,velocity)
-        if key == 'r' and snake.v!=vector(0,0, velocity):
-            snake.v=vector(0,0,-velocity)
+# def check_dir2(snake):
+#     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
+#         welcome.visible=0
+#         welcomebox.visible=0
+#         key = scene.kb.getkey() # obtain keyboard information
+        if key == 'a' and snake2.v!=vector(velocity,0,0):
+            snake2.v=vector(-velocity,0,0)
+        if key == 'd' and snake2.v!=vector(-velocity,0,0):
+            snake2.v=vector(velocity,0,0)
+        if key == 'w' and snake2.v!=vector(0, -velocity, 0):
+            snake2.v=vector(0,velocity,0)
+        if key == 's' and snake2.v!=vector(0, velocity,0):
+            snake2.v=vector(0,-velocity,0)
+        if key == 'f' and snake2.v!=vector(0,0, -velocity):
+            snake2.v=vector(0,0,velocity)
+        if key == 'r' and snake2.v!=vector(0,0, velocity):
+            snake2.v=vector(0,0,-velocity)
 def check_wall(snake):
     if snake.pos[0]<= -100 or snake.pos[0]>= 100:
         return False
@@ -107,32 +107,32 @@ def checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects,cala)
             foodsquare.pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])]
             countbits+=1
             snakeybits.append(str(countbits))
-            item=box(pos=headlog[-400*int(countbits)], length=4, width=4, height=4, color=snake.color)
+            item=box(pos=headlog[-200*int(countbits)], length=4, width=4, height=4, color=snake.color)
             bit_objects.append(item)
     return countbits and snakeybits and bit_objects
 
 def move_bits(bit_objects, headlog):
     for thing in bit_objects:
-        thing.pos = headlog[-(bit_objects.index(thing)+1)*400]
-def one_tick(snake, snakeybits, countbits, headlog, tickcount, bit_objects, zbox):
+        thing.pos = headlog[-(bit_objects.index(thing)+1)*200]
+def one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objects, zbox):
     # global tickcount
     # global headlog
     # global snakeybits
     checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects, 'magenta')
     move_bits(bit_objects, headlog)
-    check_dir(snake)
+    check_dir(snake, snake2)
     zboxmove(snake, zbox)
     headlog.append(tuple(snake.pos))
     snake.pos += snake.v*dt
     tickcount+=1
     return tickcount and headlog
-def one_tick2(snake2, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2):
+def one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2):
     # global tickcount
     # global headlog
     # global snakeybits
     checkfood(snake2, velocity, countbits2, snakeybits2, headlog2, bit_objects2, 'yellow')
     move_bits(bit_objects2, headlog2)
-    check_dir2(snake2)
+    check_dir(snake, snake2)
     zboxmove(snake2, zbox2)
     headlog2.append(tuple(snake2.pos))
     snake2.pos += snake2.v*dt
@@ -164,9 +164,17 @@ def play():
     zbox2 = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
 
     while check_wall(snake) and check_snake(snake, countbits, bit_objects) and check_wall(snake2) and check_snake(snake2, countbits2, bit_objects2) and check_snake(snake, countbits2, bit_objects2) and check_snake(snake2, countbits, bit_objects) and check_head(snake, snake2):
-
-        one_tick(snake, snakeybits, countbits, headlog, tickcount, bit_objects, zbox)
-        one_tick2(snake2, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2)
+        # if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
+        # welcome.visible=0
+        # welcomebox.visible=0
+        # key = scene.kb.getkey() #     
+        # if key == 'd' or key == 'a' or key == 'w' or key == 'f' or  key == 'r' or  key == 'l' or key == 'o' or key == 'up' or key == 'down' or key == 'left' or key == 'right':
+        #     check_dir(snake)
+        #     print('hi')
+        #     check_dir2(snake2)
+        # else:
+        one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objects, zbox)
+        one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2)
         #centerspot.centerspot(snake,scene,snake.v)
     if not check_wall(snake) or not check_snake(snake, countbits, bit_objects) or not check_snake(snake, countbits2, bit_objects2):
         win = 'Player TWO Won!'
