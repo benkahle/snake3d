@@ -5,11 +5,11 @@ import time
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="192.168.134.151", serverport=9008):
+  def __init__(self, addr="192.168.134.152", serverport=9008):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # Bind to localhost - set to external ip to connect from other computers
-    self.conn.bind(("192.168.134.151", self.clientport))
+    self.conn.bind(("192.168.134.152", self.clientport))
     self.addr = addr
     self.serverport = serverport
     self.read_list = [self.conn]
@@ -50,13 +50,15 @@ class SnakeClient(object):
         # if key == 'w': 
         #   cmd = 'f'
         #check = False
+        if key == 'q':
+          cmd = 'quit'
     return cmd
   
   def run(self):
     running = True
 
     try:
-      time.sleep(1)
+      time.sleep(.1)
       # Initialize connection to server
       self.conn.sendto("c", (self.addr, self.serverport))
       while running:
@@ -74,8 +76,16 @@ class SnakeClient(object):
                 self.snake.pos =(x,y)
               except:
                 pass  # If something goes wrong, don't draw anything.
-        print('u%s' % (str(self.check_keyinput())))
-        self.conn.sendto("u%s" % (str(self.check_keyinput())), (self.addr, self.serverport))
+        if self.check_keyinput() == 'a':
+          self.conn.sendto('ua',(self.addr, self.serverport))
+        if self.check_keyinput() == 'b':
+          self.conn.sendto('ub',(self.addr, self.serverport))
+        if self.check_keyinput() == 'c':
+          self.conn.sendto('uc',(self.addr, self.serverport))
+        if self.check_keyinput() == 'd':
+          self.conn.sendto('ud',(self.addr, self.serverport))
+        if self.check_keyinput() == 'quit':
+          running = False
     finally:
       self.conn.sendto("d", (self.addr, self.serverport))
 

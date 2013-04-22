@@ -5,7 +5,7 @@ import sys
 class SnakeServer(object):
 	def __init__(self,port = 9008):
 		self.listener = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		self.listener.bind(('192.168.134.151',9008))
+		self.listener.bind(('192.168.134.152',9008))
 		self.read_list = [self.listener] #receiving client packets here
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
@@ -56,7 +56,7 @@ class SnakeServer(object):
 						msg,addr = f.recvfrom(32)
 						if len(msg) >= 1:
 							cmd = msg[0]
-							print(cmd)
+							print(msg)
 							if cmd == 'c': #New connection
 								self.players[addr] = [(0,0),(0,0)] #((pos),(vel))
 							elif cmd == 'u': #Movement update
