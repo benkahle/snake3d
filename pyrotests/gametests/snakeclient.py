@@ -5,7 +5,7 @@ import time
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="192.168.134.152", serverport=9008):
+  def __init__(self, addr="192.168.134.152", serverport=9007):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # Bind to localhost - set to external ip to connect from other computers
@@ -22,7 +22,7 @@ class SnakeClient(object):
     self.scene = display(title='Super-Mega Snake Game', width=250, height=250)
     self.border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100)])
     self.scene.autoscale = False
-    self.snake = box(pos=(0,0), length=4, width=4, height=4, color=color.red)
+    self.snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
 
   def check_keyinput(self):
     cmd = ' '
@@ -70,21 +70,29 @@ class SnakeClient(object):
           if f is self.conn: #if a packet is received
             msg, addr = f.recvfrom(32)
             print(msg,addr)
-            for position in msg[:2].split('|'):
-              x, sep, y = position.partition(',')
-              try:
-                self.snake.pos =(x,y)
-              except:
-                pass  # If something goes wrong, don't draw anything.
-        if self.check_keyinput() == 'a':
+            messages = []
+            for inner_message in msg.split('|'):
+              messages.append(inner_message)
+            for position in messages[:-1]:
+              coords = []
+              for coord in position.split(','):
+                coords.append(coord)
+              x,y = int(float(coords[0])),int(float(coords[1]))
+              print(type(x),y)
+              self.snake.pos = vector(x,y,0)
+              print(self.snake.pos)
+              # except:
+              #   pass  # If something goes wrong, don't draw anything.
+        key = self.scene.kb.getkey()
+        if key == 'left':
           self.conn.sendto('ua',(self.addr, self.serverport))
-        if self.check_keyinput() == 'b':
+        if key == 'right':
           self.conn.sendto('ub',(self.addr, self.serverport))
-        if self.check_keyinput() == 'c':
+        if key == 'up':
           self.conn.sendto('uc',(self.addr, self.serverport))
-        if self.check_keyinput() == 'd':
+        if key == 'down':
           self.conn.sendto('ud',(self.addr, self.serverport))
-        if self.check_keyinput() == 'quit':
+        if key == 'q':
           running = False
     finally:
       self.conn.sendto("d", (self.addr, self.serverport))

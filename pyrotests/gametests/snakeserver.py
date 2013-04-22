@@ -1,11 +1,12 @@
 import socket
 import select as sel
 import sys
+from visual import *
 
 class SnakeServer(object):
-	def __init__(self,port = 9008):
+	def __init__(self,port = 9007):
 		self.listener = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		self.listener.bind(('192.168.134.152',9008))
+		self.listener.bind(('192.168.134.152',9007))
 		self.read_list = [self.listener] #receiving client packets here
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
@@ -15,13 +16,13 @@ class SnakeServer(object):
 		if mv == ' ':
 			vel == vel
 		if mv == 'a':
-			vel = (3,0)
+			vel = (-2,0)
 		if mv == 'b':
-			vel = (-3,0)
+			vel = (2,0)
 		if mv == 'c':
-			vel = (0,3)
+			vel = (0,2)
 		if mv == 'd':
-			vel = (0,-3)
+			vel = (0,-2)
 		if mv == 'e':
 			#set V(z+)
 			pass
@@ -58,7 +59,7 @@ class SnakeServer(object):
 							cmd = msg[0]
 							print(msg)
 							if cmd == 'c': #New connection
-								self.players[addr] = [(0,0),(0,0)] #((pos),(vel))
+								self.players[addr] = [vector(0,0),vector(0,0)] #((pos),(vel))
 							elif cmd == 'u': #Movement update
 								if len(msg) >= 2 and addr in self.players:
 									self.do_movement(msg[1],addr)
@@ -71,7 +72,7 @@ class SnakeServer(object):
 					running_state = self.check_death(player)
 					send = []
 					for pos in self.players:
-						send.append("{0}{1}".format(*self.players[pos][0]))
+						send.append("{0},{1}".format(*self.players[pos][0]))
 					send.append(str(running_state))
 					self.listener.sendto('|'.join(send),player)
 					print(send)
