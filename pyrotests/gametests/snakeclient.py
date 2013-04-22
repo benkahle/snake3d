@@ -19,29 +19,37 @@ class SnakeClient(object):
   
   def setup_game(self):
     #Setup vpython game world here
-    scene = display(title='Super-Mega Snake Game', width=250, height=250)
-    border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100)])
-    scene.autoscale = False
-    snake = box(pos=(0,0), length=4, width=4, height=4, color=color.red)
+    self.scene = display(title='Super-Mega Snake Game', width=250, height=250)
+    self.border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100)])
+    self.scene.autoscale = False
+    self.snake = box(pos=(0,0), length=4, width=4, height=4, color=color.red)
 
   def check_keyinput(self):
     cmd = ' '
-    if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
-      # welcome.visible=0
-      # welcomebox.visible=0
-      key = scene.kb.getkey() # obtain keyboard information
-      if key == 'left':
-        cmd = 'a'
-      if key == 'right':
-        cmd = 'b'
-      if key == 'up':
-        cmd = 'c'
-      if key == 'down':
-        cmd = 'd'
-      # if key == 's':
-      #   cmd = 'e'
-      # if key == 'w': 
-      #   cmd = 'f'
+    check = True
+    while check:
+      #if self.scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
+        # welcome.visible=0
+        # welcomebox.visible=0
+        key = self.scene.kb.getkey() # obtain keyboard information
+        if key == 'left':
+          cmd = 'a'
+          check = False
+        if key == 'right':
+          cmd = 'b'
+          check = False
+        if key == 'up':
+          cmd = 'c'
+          check = False
+        if key == 'down':
+          cmd = 'd'
+          check = False
+        # if key == 's':
+        #   cmd = 'e'
+        #check = False
+        # if key == 'w': 
+        #   cmd = 'f'
+        #check = False
     return cmd
   
   def run(self):
@@ -63,11 +71,11 @@ class SnakeClient(object):
             for position in msg[:2].split('|'):
               x, sep, y = position.partition(',')
               try:
-                snake.pos =(x,y)
+                self.snake.pos =(x,y)
               except:
                 pass  # If something goes wrong, don't draw anything.
-        print('u'+str(self.check_keyinput()))
-        self.conn.sendto("u"+str(self.check_keyinput()), (self.addr, self.serverport))
+        print('u%s' % (str(self.check_keyinput())))
+        self.conn.sendto("u%s" % (str(self.check_keyinput())), (self.addr, self.serverport))
     finally:
       self.conn.sendto("d", (self.addr, self.serverport))
 

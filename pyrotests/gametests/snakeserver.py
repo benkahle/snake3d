@@ -56,6 +56,7 @@ class SnakeServer(object):
 						msg,addr = f.recvfrom(32)
 						if len(msg) >= 1:
 							cmd = msg[0]
+							print(cmd)
 							if cmd == 'c': #New connection
 								self.players[addr] = [(0,0),(0,0)] #((pos),(vel))
 							elif cmd == 'u': #Movement update
