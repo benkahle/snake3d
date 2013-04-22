@@ -1,57 +1,83 @@
-from visual import *
-import time
-import Pyro4
+import socket
+import select as sel
+import sys
 
-class Snake(box):
+class SnakeServer(object):
+	def __init__(self,port = 9008):
+		self.listener = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+		self.listener.bind(('192.168.134.151',9008))
+		self.read_list = [self.listener] #receiving client packets here
+		self.write_list = [] #List to send to clients
+		self.players = {} #stored position and velocity by address
 
-    def check_dir(self):
-        if scene.kb.keys:
-            key = scene.kb.getkey()
-            if key == 'left':
-                self.v[0]=-1
-                self.v[1]=0
-            if key == 'right':
-                self.v[0]=1
-                self.v[1]=0
-            if key == 'up':
-                self.v[1]=1
-                self.v[0]=0
-            if key == 'down':
-                self.v[1]=-1
-                self.v[0]=0
+	def do_movement(self,mv,player):
+		vel=self.players[player][1]
+		if mv == ' ':
+			vel == vel
+		if mv == 'a':
+			vel = (3,0)
+		if mv == 'b':
+			vel = (-3,0)
+		if mv == 'c':
+			vel = (0,3)
+		if mv == 'd':
+			vel = (0,-3)
+		if mv == 'e':
+			#set V(z+)
+			pass
+		if mv == 'f':
+			pass
+			#set V(z-)
+		self.players[player][1]=vel
+		self.change_pos(player)
 
-    
+	def change_pos(self,player):
+		pos=self.players[player][0]
+		vel = self.players[player][1]
+		pos = pos + vel
+		self.players[player][0]=pos
 
-def one_tick(snake,dt):
-    if check_wall(snake):
-        snake.pos += snake.v*dt
-    else:
-        pass
-        #Quit the game/end
+	def check_death(self,player):
+		pos = self.players[player][0]
+		#Check for collisions
+		#if collision:
+		#    return True    
+		#else:
+		#    return False
+		return True #Temp
+	
+	def run(self):
+		print('waiting...')
+		try:
+			while True:
+				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[]))
+				for f in readable:
+					if f is self.listener:
+						msg,addr = f.recvfrom(32)
+						if len(msg) >= 1:
+							cmd = msg[0]
+							print(cmd)
+							if cmd == 'c': #New connection
+								self.players[addr] = [(0,0),(0,0)] #((pos),(vel))
+							elif cmd == 'u': #Movement update
+								if len(msg) >= 2 and addr in self.players:
+									self.do_movement(msg[1],addr)
+							elif cmd == 'd':
+								if addr in self.players:
+									del self.players[addr]
+							else:
+								print("unexpected: {0}".format(msg))
+				for player in self.players:
+					running_state = self.check_death(player)
+					send = []
+					for pos in self.players:
+						send.append("{0}{1}".format(*self.players[pos][0]))
+					send.append(str(running_state))
+					self.listener.sendto('|'.join(send),player)
+					print(send)
+		except KeyboardInterrupt as e:
+			pass
 
-class Game(object):
-    def __init__(self,dt):
-        self.dt = dt
-        self.world = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100),(-100,-100)])
-
-    def check_wall(self,snake):
-        if snake.pos[0]<= -100 or snake.pos[0]>= 100:
-            return False
-        else: return True
-
-    def gameloop(self):
-        if self.check_wall
-def main():
-    dt = 0.001
-    p1 = Snake(pos=(6,0,0), length=4, width=4, height=4, color=color.red)
-    p1.v = vector(0,0,0)
-    scene.autoscale = False
-    Pyro4.config.HOST=('192.168.134.147')
-    daemon=Pyro4.Daemon()
-    p1_uri = daemon.register(p1)
-    ns=Pyro4.locateNS()
-    ns.register('Snake3d.player1.snake',p1_uri)
-    one_tick(p1,dt)
-    daemon.requestLoop()
-
-main()
+if __name__ == '__main__':
+	g = SnakeServer()
+	g.run()

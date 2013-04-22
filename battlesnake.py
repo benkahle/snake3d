@@ -25,7 +25,6 @@ welcomebox=box(pos=(0,0,100), length=1000, height=150, color=color.black)
 snake.v = vector(0,0,0)
 snake2.v = vector(0,0,0)
 
-
 #creating food
 foodbox=Foodbox()
 food = box(pos=(random.randint(-96,96),random.randint(-96,96),random.randint(-96,96)), length=2, width=2, height=2, color=color.cyan)
@@ -57,11 +56,6 @@ def check_dir(snake, snake2):
             snake.v=vector(0,0,velocity)
         if key == 'o' and snake.v!=vector(0,0, velocity):
             snake.v=vector(0,0,-velocity)
-# def check_dir2(snake):
-#     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
-#         welcome.visible=0
-#         welcomebox.visible=0
-#         key = scene.kb.getkey() # obtain keyboard information
         if key == 'a' and snake2.v!=vector(velocity,0,0):
             snake2.v=vector(-velocity,0,0)
         if key == 'd' and snake2.v!=vector(-velocity,0,0):
