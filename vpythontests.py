@@ -4,6 +4,7 @@ import sys
 import os
 import time
 import centerspot
+from move_compass import move_compass
 
 class Foodbox(object):
     def __init__(self):
@@ -28,7 +29,14 @@ welcomebox=box(pos=(0,0,100), length=1000, height=150, color=color.black)
 snake.v = vector(0,0,0)
 zboxs = curve(pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])], color = color.yellow)
 yboxs = curve(pos = [(-100,snake.pos[1],-100),(100,snake.pos[1],-100),(100,snake.pos[1],100),(-100,snake.pos[1],100),(-100,snake.pos[1],-100)], color = color.yellow)
-lamp = local_light(pos=snake.pos, color=color.yellow)
+xboxs = curve(pos = [(snake.pos[0],-100,-100),(snake.pos[0],-100,100),(snake.pos[0],100,100),(snake.pos[0],100,-100),(snake.pos[0],-100,-100)], color = color.yellow)
+#making compass
+up = label(text='Up',align='center', pos=(0,10,-100), depth=0, color=color.green)
+down = label(text='Down',align='center', pos=(0,-10,-100), depth=0, color=color.green)
+s = label(text='s',align='center', pos=(0,-100,10), depth=0, color=color.green)
+w = label(text='W',align='center', pos=(0,-100,-10), depth=0, color=color.green)
+left = label(text='Left',align='center', pos=(snake.pos[0]-10,0,-100), depth=0, color=color.green)
+right = label(text='Right',align='center', pos=(snake.pos[0]+10,0,-100), depth=0, color=color.green)
 
 #creating food
 foodbox=Foodbox()
@@ -36,8 +44,7 @@ food = box(pos=(random.randint(-96,96),random.randint(-96,96),random.randint(-96
 foodbox.food.append(food)
 foodsquare1 = curve(pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])], color = color.green)
 foodsquare2 = curve(pos = [(-100,food.pos[1],-100),(100,food.pos[1],-100),(100,food.pos[1],100),(-100,food.pos[1],100),(-100,food.pos[1],-100)], color = color.green)
-
-
+foodsquare3 = curve(pos = [(food.pos[0],-100,-100),(food.pos[0],-100,100),(food.pos[0],100,100),(food.pos[0],100,-100),(food.pos[0],-100,-100)], color = color.green)
 def restart_program():
     python = sys.executable
     os.execl(python, python, * sys.argv)
@@ -79,6 +86,7 @@ def check_snake(snake, countbits):
 def zboxmove(snake):
     zboxs.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
     yboxs.pos = [(-100,snake.pos[1],-100),(100,snake.pos[1],-100),(100,snake.pos[1],100),(-100,snake.pos[1],100),(-100,snake.pos[1],-100)]
+    xboxs.pos = [(snake.pos[0],-100,-100),(snake.pos[0],-100,100),(snake.pos[0],100,100),(snake.pos[0],100,-100),(snake.pos[0],-100,-100)]
 def checkfood():
     global countbits
     global velocity 
@@ -89,6 +97,7 @@ def checkfood():
             randpos(food)
             foodsquare1.pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])]
             foodsquare2.pos = [(-100,food.pos[1],-100),(100,food.pos[1],-100),(100,food.pos[1],100),(-100,food.pos[1],100),(-100,food.pos[1],-100)]
+            foodsquare3.pos = [(food.pos[0],-100,-100),(food.pos[0],-100,100),(food.pos[0],100,100),(food.pos[0],100,-100),(food.pos[0],-100,-100)]
             countbits+=1
             snakeybits.append(str(countbits))
             item=box(pos=headlog[-400*int(countbits)], length=4, width=4, height=4, color=color.red)
@@ -105,9 +114,9 @@ def one_tick(snake):
     move_bits(bit_objects)
     check_dir(snake)
     zboxmove(snake)
+    move_compass(snake,up,w,down,s,left,right)
     headlog.append(tuple(snake.pos))
     snake.pos += snake.v*dt
-    lamp.pos=snake.pos+vector(0,0,1)
     tickcount+=1
     return tickcount and headlog
 def end(): 
@@ -127,5 +136,3 @@ def play():
     end()
 
 play()
-
-

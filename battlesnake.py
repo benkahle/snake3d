@@ -25,7 +25,6 @@ welcomebox=box(pos=(0,0,100), length=1000, height=150, color=color.black)
 snake.v = vector(0,0,0)
 snake2.v = vector(0,0,0)
 
-
 #creating food
 foodbox=Foodbox()
 food = box(pos=(random.randint(-96,96),random.randint(-96,96),random.randint(-96,96)), length=2, width=2, height=2, color=color.cyan)
