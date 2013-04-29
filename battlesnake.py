@@ -5,6 +5,7 @@ import os
 import time
 import centerspot
 
+
 class Foodbox(object):
     def __init__(self):
         self.food=[]
@@ -16,7 +17,10 @@ velocity=1
 #creating game environment and welcome menu
 
 scene = display(title='Super-Mega Snake Game', width=750, height=750)
-welcome = label(text='Welcome to Super-Mega Snake Game!\n Player 1(purple) controlles X and Y axes are controlled with the arrow keys.\nZ axis is controlled by O and L.\n Player 2(yellow) is controlled by A, W, S, and D. \n Z axis is controlled by F and R. \n Press any direction to start.', align='center',pos=(0,0,0))
+welcome = label(text='Welcome to Super-Mega Snake Game!',align='center',pos=(0,0,0), yoffset= 60, height = 25)
+welcome_purple = label(text = 'Player 1(purple): \nArrow keys control X & Y axes.\nO and L control Z axis', align='center',pos=(0,0,0), color = color.magenta, xoffset= -20)
+welcome_yellow = label(text = 'Player 2(yellow): \nA, W, S, and D control X & Y axes. \nF and R control Z axis', align='center',pos=(0,0,0), color = color.yellow, xoffset = 20 )
+welcome_go = label(text = 'Press any direction to start.', align='center',pos=(0,0,0), yoffset=-60 )
 border = curve(pos=[(-100,-100,100),(100,-100,100),(100,-100,-100),(100,100,-100),(-100,100,-100),(-100,100,100),(-100,-100,100),(-100,-100,-100),(-100,100,-100),(-100,-100,-100),(100,-100,-100),(100,-100,100),(100,100,100),(100,100,-100),(100,100,100),(-100,100,100)])
 scene.autoscale = False
 snake = box(pos=(20,0,0), length=4, width=4, height=4, color=color.magenta)
@@ -24,6 +28,7 @@ snake2 = box(pos=(-10,0,0), length=4, width=4, height=4, color=color.yellow)
 welcomebox=box(pos=(0,0,100), length=1000, height=150, color=color.black)
 snake.v = vector(0,0,0)
 snake2.v = vector(0,0,0)
+
 
 #creating food
 foodbox=Foodbox()
@@ -56,6 +61,11 @@ def check_dir(snake, snake2):
             snake.v=vector(0,0,velocity)
         if key == 'o' and snake.v!=vector(0,0, velocity):
             snake.v=vector(0,0,-velocity)
+# def check_dir2(snake):
+#     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
+#         welcome.visible=0
+#         welcomebox.visible=0
+#         key = scene.kb.getkey() # obtain keyboard information
         if key == 'a' and snake2.v!=vector(velocity,0,0):
             snake2.v=vector(-velocity,0,0)
         if key == 'd' and snake2.v!=vector(-velocity,0,0):
