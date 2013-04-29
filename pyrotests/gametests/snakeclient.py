@@ -5,11 +5,11 @@ import time
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="192.168.134.152", serverport=9007):
+  def __init__(self, addr="10.41.24.86", serverport=9007):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # Bind to localhost - set to external ip to connect from other computers
-    self.conn.bind(("192.168.134.152", self.clientport))
+    # self.conn.bind(("127.0.0.1", self.clientport))
     self.addr = addr
     self.serverport = serverport
     self.read_list = [self.conn]
