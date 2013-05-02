@@ -15,7 +15,6 @@ dt = 0.020
 velocity=1
 
 #creating game environment and welcome menu
-
 scene = display(title='Super-Mega Snake Game', width=750, height=750)
 welcome = label(text='Welcome to Super-Mega Snake Game!',align='center',pos=(0,0,0), yoffset= 60, height = 25)
 welcome_purple = label(text = 'Player 1(purple): \nArrow keys control X & Y axes.\nO and L control Z axis', align='center',pos=(0,0,0), color = color.magenta, xoffset= -20)
@@ -48,6 +47,9 @@ def check_dir(snake, snake2):
     if scene.kb.keys: # is there an evcd UnicodeDecodeError()ent waiting to be processed?
         welcome.visible=0
         welcomebox.visible=0
+        welcome_yellow.visible=0
+        welcome_purple.visible=0
+        welcome_go.visible=0
         key = scene.kb.getkey() # obtain keyboard information
         if key == 'left' and snake.v!=vector(velocity,0,0):
             snake.v=vector(-velocity,0,0)
@@ -94,7 +96,6 @@ def check_snake(snake, countbits, bit_objects):
     return True
 def check_head(snake, snake2):
     n = 2 
-   # print(abs (snake.pos[0] - snake2.pos[0]))# and abs(snake.pos[1] - snake2.pos[1]) and abs(snake.pos[2] - snake2.pos[2])
     if abs (snake.pos[0] - snake2.pos[0])<=n and abs(snake.pos[1] - snake2.pos[1])<=n and abs(snake.pos[2] - snake2.pos[2])<=n:
         return False
     return True
@@ -103,9 +104,6 @@ def zboxmove(snake, zbox, ybox):
     zbox.pos = [(-100,-100,snake.pos[2]),(100,-100,snake.pos[2]),(100,100,snake.pos[2]),(-100,100,snake.pos[2]),(-100,-100,snake.pos[2])]
     ybox.pos = [(-100,snake.pos[1],-100),(100,snake.pos[1],-100),(100,snake.pos[1],100),(-100,snake.pos[1],100),(-100,snake.pos[1],-100)]
 def checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects,cala):
-    # global countbits
-    # global velocity 
-    # global snakepos
     n=3
     for food in foodbox.food:
         if abs(snake.pos[0]-food.pos[0])<=n and abs(snake.pos[1]-food.pos[1])<=n and abs(snake.pos[2]-food.pos[2])<=n:
@@ -122,9 +120,6 @@ def move_bits(bit_objects, headlog):
     for thing in bit_objects:
         thing.pos = headlog[-(bit_objects.index(thing)+1)*200]
 def one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objects, zbox, ybox):
-    # global tickcount
-    # global headlog
-    # global snakeybits
     checkfood(snake, velocity, countbits, snakeybits, headlog, bit_objects, 'magenta')
     move_bits(bit_objects, headlog)
     check_dir(snake, snake2)
@@ -134,9 +129,6 @@ def one_tick(snake, snake2, snakeybits, countbits, headlog, tickcount, bit_objec
     tickcount+=1
     return tickcount and headlog
 def one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2, ybox2):
-    # global tickcount
-    # global headlog
-    # global snakeybits
     checkfood(snake2, velocity, countbits2, snakeybits2, headlog2, bit_objects2, 'yellow')
     move_bits(bit_objects2, headlog2)
     check_dir(snake, snake2)
@@ -188,9 +180,9 @@ def play():
         one_tick2(snake2, snake, snakeybits2, countbits2, headlog2, tickcount2, bit_objects2, zbox2, ybox2)
         #centerspot.centerspot(snake,scene,snake.v)
     if not check_wall(snake) or not check_snake(snake, countbits, bit_objects) or not check_snake(snake, countbits2, bit_objects2):
-        win = 'Player TWO Won!'
+        win = 'Player 2 Won!'
     if not check_wall(snake2) or not check_snake(snake2, countbits2, bit_objects2) or not check_snake(snake2, countbits, bit_objects):
-        win = 'Player ONE Won!'
+        win = 'Player 1 Won!'
     if not check_head(snake, snake2):
         win = "It's a tie!"
     end(win)
