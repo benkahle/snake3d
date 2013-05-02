@@ -44,13 +44,13 @@ class SnakeServer(object):
 	def check_death(self,player):
 		pos = self.players[player]['pos']
 		if pos[0]<= -100 or pos[0]>= 100:
-        	return False
+			return False
     	elif pos[1]<= -100 or pos[1]>= 100:
-     		return False
-   		# elif snake[2]<= -100 or snake[2]>= 100:
-     # 		return False
-    	elif:
-    		n =2
+			return False
+		# elif snake[2]<= -100 or snake[2]>= 100:
+			#return False
+		elif:
+			n =2
     		for person in self.players:
     			for i in range(1:person['countbits']+1):
 	    			position=headlog[-200*int(i)]
