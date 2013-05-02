@@ -73,7 +73,7 @@ class SnakeClient(object):
             messages = []
             for inner_message in msg.split('|'):
               messages.append(inner_message)
-            for position in messages[:-1]:
+            for position in messages[0]: #snake '1'
               coords = []
               for coord in position.split(','):
                 coords.append(coord)
