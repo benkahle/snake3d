@@ -2,10 +2,11 @@ import socket
 import select as sel
 import random
 import time
+import re
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="10.41.24.86", serverport=9007):
+  def __init__(self, addr="10.41.64.161", serverport=9007):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # Bind to localhost - set to external ip to connect from other computers
@@ -22,7 +23,10 @@ class SnakeClient(object):
     self.scene = display(title='Super-Mega Snake Game', width=250, height=250)
     self.border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100)])
     self.scene.autoscale = False
-    self.snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
+    #self.snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
+    self.p1_boxes = []
+    self.p2_boxes = []
+    self.food_box = box(pos=(100,100), height=4, width=4, color=color.cyan)
 
   def check_keyinput(self):
     cmd = ' '
@@ -53,7 +57,21 @@ class SnakeClient(object):
         if key == 'q':
           cmd = 'quit'
     return cmd
-  
+
+  def make_snake(self,coords,player):
+    if player == 'p1':
+      item = box(pos=coords[-1], length=4, width=4, color=color.red)
+      if len(coords) > len(self.p1_boxes):
+        self.p1_boxes.append(item)
+      for snake_box in self.p1_boxes:
+        snake_box.pos = coords[-(self.p1_boxes.index(snake_box))]
+    if player == 'p2': 
+      item = box(pos=coords[-1], length=4, width=4, color=color.green)
+      if len(coords) > len(self.p2_boxes):
+        self.p2_boxes.append(item)
+      for snake_box in self.p2_boxes:
+        snake_box.pos = coords[-(self.p2_boxes.index(snake_box))]
+
   def run(self):
     running = True
 
@@ -73,16 +91,32 @@ class SnakeClient(object):
             messages = []
             for inner_message in msg.split('|'):
               messages.append(inner_message)
-            for position in messages[0]: #snake '1'
-              coords = []
-              for coord in position.split(','):
-                coords.append(coord)
-              x,y = int(float(coords[0])),int(float(coords[1]))
-              print(type(x),y)
-              self.snake.pos = vector(x,y,0)
-              print(self.snake.pos)
-              # except:
-              #   pass  # If something goes wrong, don't draw anything.
+            p1_coords = []
+            p2_coords = []
+            for position in messages[0].split(';'): #snake '1'
+              position = re.sub('[\(\)]','',position)
+              print(position)
+              positions = []
+              for i in position.split(','):
+                positions.append(i)
+              print(positions)
+              p1_coords.append(vector(int(positions[0]),int(positions[1])))
+            for position in messages[1].split(';'): #snake '2'
+              position = re.sub('[\(\)]','',position)
+              positions = []
+              for i in position.split(','):
+                positions.append(i)
+              p2_coords.append(vector(int(positions[0]),int(positions[1])))
+            self.make_snake(p1_coords,'p1')
+            self.make_snake(p2_coords,'p2')
+            for position in messages[2]: #food
+              position = re.sub('[\(\)]','',position)
+              positions = []
+              for i in position.split(','):
+                positions.append(i)
+              self.food_box.pos = vector(int(positions[0]),int(positions[1]))
+            # except:
+            #   pass  # If something goes wrong, don't draw anything.
         key = self.scene.kb.getkey()
         if key == 'left':
           self.conn.sendto('ua',(self.addr, self.serverport))

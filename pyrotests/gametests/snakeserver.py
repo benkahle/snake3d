@@ -5,7 +5,7 @@ from visual import *
 class SnakeServer(object):
 	def __init__(self,port = 9007):
 		self.listener = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		self.listener.bind(('10.41.24.86',9007))
+		self.listener.bind(('10.41.64.161',9007))
 		self.read_list = [self.listener] #receiving client packets here
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
@@ -93,27 +93,29 @@ class SnakeServer(object):
 									del self.players[addr]
 							else:
 								print("unexpected: {0}".format(msg))
-				running_state = True
-				for player in self.players:
-					if self.check_death(player):
-						running_state = False
-				for player in self.players:
-					self.players[player]['headlog'].append(self.players[player]['pos'])
-					self.checkfood(player, food)
-					self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:400:]
-					snake_pos_to_send = []
-					for position in self.players[player]['snakelog']:
-						snake_pos_to_send.append(str(position))
+								
+				while len(self.players)>1:
+					running_state = True
+					for player in self.players:
+						if self.check_death(player):
+							running_state = False
+					for player in self.players:
+						self.players[player]['headlog'].append(self.players[player]['pos'])
+						self.checkfood(player, food)
+						self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:400:]
+						snake_pos_to_send = []
+						for position in self.players[player]['snakelog']:
+							snake_pos_to_send.append(str(position))
 
-					send = []
-					send.append(','.join(snake_pos_to_send))
-					foodpos = str(food)
-					send.append(foodpos)
-					send.append(str(running_state))
-					msg = '|'.join(send)
-					print(msg)
-					self.listener.sendto(msg,player)
-					print(send)
+						send = []
+						send.append(';'.join(snake_pos_to_send))
+						foodpos = str(food)
+						send.append(foodpos)
+						send.append(str(running_state))
+						msg = '|'.join(send)
+						print(msg)
+						self.listener.sendto(msg,player)
+						print(send)
 		except KeyboardInterrupt as e:
 			pass
 
