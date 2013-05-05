@@ -60,13 +60,13 @@ class SnakeClient(object):
 
   def make_snake(self,coords,player):
     if player == 'p1':
-      item = box(pos=coords[-1], length=4, width=4, color=color.red)
+      item = box(pos=coords[-1],length=4,width=4,height=4,color=color.red)
       if len(coords) > len(self.p1_boxes):
         self.p1_boxes.append(item)
       for snake_box in self.p1_boxes:
         snake_box.pos = coords[-(self.p1_boxes.index(snake_box))]
     if player == 'p2': 
-      item = box(pos=coords[-1], length=4, width=4, color=color.green)
+      item = box(pos=coords[-1],length=4,width=4,height=4,color=color.green)
       if len(coords) > len(self.p2_boxes):
         self.p2_boxes.append(item)
       for snake_box in self.p2_boxes:
