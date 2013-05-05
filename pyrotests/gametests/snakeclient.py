@@ -21,7 +21,7 @@ class SnakeClient(object):
   def setup_game(self):
     #Setup vpython game world here
     self.scene = display(title='Super-Mega Snake Game', width=250, height=250)
-    self.border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100)])
+    self.border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100),(-100,-100)])
     self.scene.autoscale = False
     #self.snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
     self.p1_boxes = []
@@ -95,11 +95,9 @@ class SnakeClient(object):
             p2_coords = []
             for position in messages[0].split(';'): #snake '1'
               position = re.sub('[\(\)]','',position)
-              print(position)
               positions = []
               for i in position.split(','):
                 positions.append(i)
-              print(positions)
               p1_coords.append(vector(int(positions[0]),int(positions[1])))
             for position in messages[1].split(';'): #snake '2'
               position = re.sub('[\(\)]','',position)
@@ -109,12 +107,14 @@ class SnakeClient(object):
               p2_coords.append(vector(int(positions[0]),int(positions[1])))
             self.make_snake(p1_coords,'p1')
             self.make_snake(p2_coords,'p2')
-            for position in messages[2]: #food
-              position = re.sub('[\(\)]','',position)
-              positions = []
-              for i in position.split(','):
-                positions.append(i)
-              self.food_box.pos = vector(int(positions[0]),int(positions[1]))
+            position = messages[2] #food
+            position = re.sub('[\(\)]','',position)
+            print(position)
+            positions = []
+            for i in position.split(','):
+              positions.append(i)
+            print(positions)
+            self.food_box.pos = vector(int(positions[0]),int(positions[1]))
             # except:
             #   pass  # If something goes wrong, don't draw anything.
         key = self.scene.kb.getkey()

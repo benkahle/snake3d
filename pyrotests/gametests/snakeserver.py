@@ -93,12 +93,14 @@ class SnakeServer(object):
 									del self.players[addr]
 							else:
 								print("unexpected: {0}".format(msg))
-								
-				while len(self.players)>1:
+
+				if len(self.players)>1:
 					running_state = True
 					for player in self.players:
 						if self.check_death(player):
 							running_state = False
+
+					send = []
 					for player in self.players:
 						self.players[player]['headlog'].append(self.players[player]['pos'])
 						self.checkfood(player, food)
@@ -106,14 +108,13 @@ class SnakeServer(object):
 						snake_pos_to_send = []
 						for position in self.players[player]['snakelog']:
 							snake_pos_to_send.append(str(position))
-
-						send = []
-						send.append(';'.join(snake_pos_to_send))
-						foodpos = str(food)
-						send.append(foodpos)
-						send.append(str(running_state))
-						msg = '|'.join(send)
-						print(msg)
+							send.append(';'.join(snake_pos_to_send))
+					foodpos = str(food)
+					send.append(foodpos)
+					send.append(str(running_state))
+					msg = '|'.join(send)
+					print(msg)
+					for player in self.players:
 						self.listener.sendto(msg,player)
 						print(send)
 		except KeyboardInterrupt as e:
