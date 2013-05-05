@@ -1,6 +1,7 @@
 import socket
 import select as sel
 import sys
+import random
 from visual import *
 class SnakeServer(object):
 	def __init__(self,port = 9007):
@@ -84,7 +85,7 @@ class SnakeServer(object):
 							cmd = msg[0]
 							print(msg)
 							if cmd == 'c': #New connection
-								self.players[addr] = {'pos':(0,0), 'velocity':(0,0), 'headlog':[], 'countbits':0, 'snakepos':[]} 
+								self.players[addr] = {'pos':(random.randint(-50,50),random.randint(-50,50)), 'velocity':(0,0), 'headlog':[], 'countbits':0, 'snakepos':[]} 
 							elif cmd == 'u': #Movement update
 								if len(msg) >= 2 and addr in self.players:
 									self.do_movement(msg[1],addr)
