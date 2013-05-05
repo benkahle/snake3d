@@ -16,7 +16,7 @@ class SnakeServer(object):
 
 
 	def do_movement(self,mv,player):
-		vel=self.players[player][1]
+		vel=self.players[player]['velocity']
 		if mv == ' ':
 			vel == vel
 		if mv == 'a':
@@ -33,7 +33,7 @@ class SnakeServer(object):
 		if mv == 'f':
 			pass
 			#set V(z-)
-		self.players[player][1]=vel
+		self.players[player]['velocity']=vel
 		self.change_pos(player)
 
 	def change_pos(self,player):
