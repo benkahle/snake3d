@@ -86,7 +86,7 @@ class SnakeClient(object):
         readable, writable, exceptional=(sel.select(self.read_list, self.write_list, []))
         for f in readable:
           if f is self.conn: #if a packet is received
-            msg, addr = f.recvfrom(32)
+            msg, addr = f.recvfrom(4096)
             print(msg,addr)
             messages = []
             for inner_message in msg.split('|'):

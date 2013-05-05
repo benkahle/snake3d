@@ -67,7 +67,7 @@ class SnakeServer(object):
            #@snakeybits.append(str(countbits))
             #item=box(pos=self.players[player][headlog][-200*int(self.players[player][countbits])], length=4, width=4, height=4, color=snake.color)
            # self.players[player][bit_objects].append(item)
-		return self
+		return food
 
 	def run(self):
 		print('waiting...')
@@ -85,7 +85,7 @@ class SnakeServer(object):
 							cmd = msg[0]
 							print(msg)
 							if cmd == 'c': #New connection
-								self.players[addr] = {'pos':(random.randint(-50,50),random.randint(-50,50)), 'velocity':(0,0), 'headlog':[], 'countbits':0, 'snakepos':[]} 
+								self.players[addr] = {'pos':(random.randint(-50,50),random.randint(-50,50)), 'velocity':(0,0), 'headlog':[], 'countbits':1, 'snakepos':[]} 
 							elif cmd == 'u': #Movement update
 								if len(msg) >= 2 and addr in self.players:
 									self.do_movement(msg[1],addr)
@@ -104,12 +104,15 @@ class SnakeServer(object):
 					send = []
 					for player in self.players:
 						self.players[player]['headlog'].append(self.players[player]['pos'])
-						self.checkfood(player, food)
-						self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:400:]
+						print(self.players[player]['headlog'])
+						food = self.checkfood(player, food)
+						print(self.players[player]['countbits'])
+						self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:]
+						print(self.players[player]['snakelog'])
 						snake_pos_to_send = []
 						for position in self.players[player]['snakelog']:
 							snake_pos_to_send.append(str(position))
-							send.append(';'.join(snake_pos_to_send))
+						send.append(';'.join(snake_pos_to_send))
 					foodpos = str(food)
 					send.append(foodpos)
 					send.append(str(running_state))
@@ -117,7 +120,6 @@ class SnakeServer(object):
 					print(msg)
 					for player in self.players:
 						self.listener.sendto(msg,player)
-						print(send)
 		except KeyboardInterrupt as e:
 			pass
 
