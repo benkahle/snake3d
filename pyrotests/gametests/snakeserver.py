@@ -39,7 +39,7 @@ class SnakeServer(object):
 	def change_pos(self,player):
 		pos=self.players[player]['pos']
 		vel = self.players[player]['velocity']
-		pos = pos + vel
+		pos = (pos[0] + vel[0],pos[1]+vel[1])
 		self.players[player]['pos']=pos
 
 	def check_death(self,player):
@@ -53,9 +53,9 @@ class SnakeServer(object):
 		else:
 			n =2
     		for person in self.players:
-				for i in range(1,self.players[player]['countbits']+1):
-					position=headlog[-200*int(i)]
-					if abs(self.players[player]['pos'][0] - position[0])<=n and abs(self.players[player]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
+				for i in range(1,self.players[person]['countbits']):
+					position=self.players[person][headlog][int(i)]
+					if abs(self.players[person]['pos'][0] - position[0])<=n and abs(self.players[person]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
 						return False
 					else: 
 						return True
