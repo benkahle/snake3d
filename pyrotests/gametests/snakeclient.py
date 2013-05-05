@@ -26,7 +26,7 @@ class SnakeClient(object):
     #self.snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
     self.p1_boxes = []
     self.p2_boxes = []
-    self.food_box = box(pos=(100,100), height=4, width=4,height=4, color=color.cyan)
+    self.food_box = box(pos=(100,100),length=4,width=4,height=4,color=color.cyan)
 
   def check_keyinput(self):
     cmd = ' '
