@@ -113,7 +113,7 @@ class SnakeClient(object):
           #print(positions)
           self.food_box.pos = vector(int(positions[0]),int(positions[1]))
           running_state = messages[3]
-          if running_state == True:
+          if running_state == 'True':
             pass
           # elif running_state == str(localport):
           #   print(running_state)
