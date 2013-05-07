@@ -1,0 +1,21 @@
+						Design Guide
+
+1. Basic Snake:
+
+	Originally, the snake consists of one box object. The direction of its velocity is determined by user input, and its position is determined using the velocity every time step. The yellow orientation boxes at the sides of the display move with the snake.
+
+2. Food and Snake Incrementation:
+
+	The snake's position history is logged in a list (called "headlog"). Once food is eaten by a snake, a new box object is created whose position is given by a negative index of headlog calculated such that the distance between the center of the snake head and the new box is equal to the width of one box. As positions of the snake head are added to headlog, the new box continues to draw its position from the same negative index and therefore continues to trail behind the head. New boxes are added to a snake each time it eats food, with their position index in headlog determined by a counter that is incremented every time a snake eats food.
+
+3. Collision:
+
+	A collision takes place when a snake head comes within a certain distance (set by the tolerance "n" in various functions) of any other box object or a wall of the arena. A snake head colliding with a snake tail results in that head losing, regardless of which snake's tail was involved in the collision. Two heads colliding results in a tie. A head colliding with a food box results in that snake "eating" the food and gaining a tail box (see Section 2).
+
+4. Camera:
+
+	In 1-Player and Networked game modes, the display view shifts with the position and velocity of the snake. This is achieved by changing the center of the scene to be immediately in front of the snake and the vector which points at the center to begin at the snake's position. Thus, the camera is always behind the snake, pointing in the direction of travel.
+
+5. Networking:
+
+	Magic. Just pure magic. Also Ben. 
