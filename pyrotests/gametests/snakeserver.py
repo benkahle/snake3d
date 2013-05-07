@@ -74,7 +74,7 @@ class SnakeServer(object):
 		try:
 			while True:
 				if len(self.players)>1:
-					running_state = 'run'
+					running_state = True
 					for player in self.players:
 						self.change_pos(player)
 						if self.check_death(player):
