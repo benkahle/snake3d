@@ -137,8 +137,9 @@ class SnakeClient(object):
             self.conn.sendto('ud',(self.addr, self.serverport))
           if key == 'q':
             running = False
-        self.conn.sendto("d", (self.addr, self.serverport))
-
+      self.conn.sendto("d", (self.addr, self.serverport))
+    except:
+      print('Something went wrong! Sorry, please try again!')
 
 if __name__ == "__main__":
   g = SnakeClient()
