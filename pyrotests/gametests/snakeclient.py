@@ -9,8 +9,6 @@ class SnakeClient(object):
   def __init__(self, addr="10.41.64.143", serverport=9006):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # Bind to localhost - set to external ip to connect from other computers
-    # self.conn.bind(("127.0.0.1", self.clientport))
     self.addr = addr
     self.serverport = serverport
     self.read_list = [self.conn]
@@ -74,73 +72,77 @@ class SnakeClient(object):
 
   def run(self):
     running = True
-    try:
-      time.sleep(.1)
-      # Initialize connection to server
-      self.conn.sendto("c", (self.addr, self.serverport))
-      localip, localport = self.conn.getsockname()
-      #print(self.meip,self.meport)
-      while running:
-        #'Wait' function for discrete time?
-        
-        # select on specified file descriptors
-        readable, writable, exceptional=(sel.select(self.read_list, self.write_list, [],0.1))
-        for f in readable:
-          if f is self.conn: #if a packet is received
-            msg, sentaddr = f.recvfrom(4096)
-            print(msg,sentaddr)
-            messages = []
-            for inner_message in msg.split('|'):
-              messages.append(inner_message)
-            p1_coords = []
-            p2_coords = []
-            for position in messages[0].split(';'): #snake '1'
-              position = re.sub('[\(\)]','',position)
-              positions = []
-              for i in position.split(','):
-                positions.append(i)
-              p1_coords.append(vector(int(positions[0]),int(positions[1])))
-            for position in messages[1].split(';'): #snake '2'
-              position = re.sub('[\(\)]','',position)
-              positions = []
-              for i in position.split(','):
-                positions.append(i)
-              p2_coords.append(vector(int(positions[0]),int(positions[1])))
-            self.make_snake(p1_coords,'p1')
-            self.make_snake(p2_coords,'p2')
-            position = messages[2] #food
+    time.sleep(.1)
+    # Initialize connection to server
+    self.conn.sendto("c", (self.addr, self.serverport))
+    localip, localport = self.conn.getsockname()
+    print(localip,localport)
+    print(type(localport))
+    while running:
+      #'Wait' function for discrete time?
+      
+      # select on specified file descriptors
+      readable, writable, exceptional=(sel.select(self.read_list, self.write_list, [],0.1))
+      for f in readable:
+        if f is self.conn: #if a packet is received
+          msg, sentaddr = f.recvfrom(4096)
+          print(msg,sentaddr)
+          messages = []
+          for inner_message in msg.split('|'):
+            messages.append(inner_message)
+          p1_coords = []
+          p2_coords = []
+          for position in messages[0].split(';'): #snake '1'
             position = re.sub('[\(\)]','',position)
             positions = []
             for i in position.split(','):
               positions.append(i)
-            #print(positions)
-            self.food_box.pos = vector(int(positions[0]),int(positions[1]))
-            running_state = messages[3]
-            if running_state == 'run':
-              pass
-            elif running_state == localport:
-              loss_text = label(text='You Lose!', align='center',pos=[0,0],height=30,color=color.red)
-              running = False
-            else:
-              loss_text = label(text='You Win!', align='center',pos=[0,0],height=30,color=color.red)
-              running = False
-            # except:
-            #   pass  # If something goes wrong, don't draw anything.
-        if self.scene.kb.keys:
-          key = self.scene.kb.getkey()
-          if key == 'left':
-            self.conn.sendto('ua',(self.addr, self.serverport))
-          if key == 'right':
-            self.conn.sendto('ub',(self.addr, self.serverport))
-          if key == 'up':
-            self.conn.sendto('uc',(self.addr, self.serverport))
-          if key == 'down':
-            self.conn.sendto('ud',(self.addr, self.serverport))
-          if key == 'q':
+            p1_coords.append(vector(int(positions[0]),int(positions[1])))
+          for position in messages[1].split(';'): #snake '2'
+            position = re.sub('[\(\)]','',position)
+            positions = []
+            for i in position.split(','):
+              positions.append(i)
+            p2_coords.append(vector(int(positions[0]),int(positions[1])))
+          self.make_snake(p1_coords,'p1')
+          self.make_snake(p2_coords,'p2')
+          position = messages[2] #food
+          position = re.sub('[\(\)]','',position)
+          positions = []
+          for i in position.split(','):
+            positions.append(i)
+          #print(positions)
+          self.food_box.pos = vector(int(positions[0]),int(positions[1]))
+          running_state = messages[3]
+          if running_state == 'run':
+            pass
+          elif running_state == str(localport):
+            print(running_state)
+            print('and you are')
+            print(localport)
+            loss_text = label(text='You Lose!', align='center',pos=[0,0],height=30,color=color.red)
             running = False
-      self.conn.sendto("d", (self.addr, self.serverport))
-    except:
-      print('Something went wrong! Sorry, please try again!')
+          else:
+            print(running_state)
+            print('and you are')
+            print(localport)
+            loss_text = label(text='You Win!', align='center',pos=[0,0],height=30,color=color.red)
+            running = False
+          # except:
+          #   pass  # If something goes wrong, don't draw anything.
+      if self.scene.kb.keys:
+        key = self.scene.kb.getkey()
+        if key == 'left':
+          self.conn.sendto('ua',(self.addr, self.serverport))
+        if key == 'right':
+          self.conn.sendto('ub',(self.addr, self.serverport))
+        if key == 'up':
+          self.conn.sendto('uc',(self.addr, self.serverport))
+        if key == 'down':
+          self.conn.sendto('ud',(self.addr, self.serverport))
+        if key == 'q':
+          running = False
+    self.conn.sendto("d", (self.addr, self.serverport))
 
 if __name__ == "__main__":
   g = SnakeClient()

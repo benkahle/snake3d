@@ -53,7 +53,7 @@ class SnakeServer(object):
 			n =2
     		for person in self.players:
 				for i in range(1,self.players[person]['countbits']):
-					position=self.players[person]['headlog'][int(i)]
+					position=self.players[person]['snakelog'][int(i)]
 					if abs(self.players[person]['pos'][0] - position[0])<=n and abs(self.players[person]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
 						return False
 					else: 
@@ -78,6 +78,7 @@ class SnakeServer(object):
 					for player in self.players:
 						self.change_pos(player)
 						if self.check_death(player):
+							print(player[1])
 							running_state = player[1]
 
 					send = []
@@ -85,7 +86,6 @@ class SnakeServer(object):
 						self.players[player]['headlog'].append(self.players[player]['pos'])
 						food = self.checkfood(player, food)
 						self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:]
-						print(self.players[player]['snakelog'])
 						snake_pos_to_send = []
 						for position in self.players[player]['snakelog']:
 							snake_pos_to_send.append(str(position))
@@ -97,7 +97,7 @@ class SnakeServer(object):
 					msg = '|'.join(send)
 					print(msg)
 					for player in self.players:
-						print(player)
+						#print(player)
 						self.listener.sendto(msg,player)
 
 				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[],0.1))
