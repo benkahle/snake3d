@@ -6,7 +6,7 @@ from visual import *
 class SnakeServer(object):
 	def __init__(self,port = 9007):
 		self.listener = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		self.listener.bind(('10.41.64.161',9007))
+		self.listener.bind(('10.41.64.143',9007))
 		self.read_list = [self.listener] #receiving client packets here
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
@@ -72,12 +72,37 @@ class SnakeServer(object):
 	def run(self):
 		print('waiting...')
 		food = (random.randint(-96,96),random.randint(-96,96))
-		# foodbox.food.append(food)
-		# foodsquare1 = curve(pos = [(-100,-100,food.pos[2]),(100,-100,food.pos[2]),(100,100,food.pos[2]),(-100,100,food.pos[2]),(-100,-100,food.pos[2])], color = color.green)
-		# foodsquare2 = curve(pos = [(-100,food.pos[1],-100),(100,food.pos[1],-100),(100,food.pos[1],100),(-100,food.pos[1],100),(-100,food.pos[1],-100)], color = color.green)
 		try:
 			while True:
-				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[]))
+				if len(self.players)>1:
+					running_state = True
+					for player in self.players:
+						self.change_pos(player)
+						if self.check_death(player):
+							running_state = False
+
+					send = []
+					for player in self.players:
+						self.players[player]['headlog'].append(self.players[player]['pos'])
+						#print(self.players[player]['headlog'])
+						food = self.checkfood(player, food)
+						#print(self.players[player]['countbits'])
+						self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:]
+						print(self.players[player]['snakelog'])
+						snake_pos_to_send = []
+						for position in self.players[player]['snakelog']:
+							snake_pos_to_send.append(str(position))
+						send.append(';'.join(snake_pos_to_send))
+					print(snake_pos_to_send)
+					foodpos = str(food)
+					send.append(foodpos)
+					send.append(str(running_state))
+					msg = '|'.join(send)
+					print(msg)
+					for player in self.players:
+						self.listener.sendto(msg,player)
+
+				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[],0.1))
 				for f in readable:
 					if f is self.listener:
 						msg,addr = f.recvfrom(32)
@@ -94,32 +119,6 @@ class SnakeServer(object):
 									del self.players[addr]
 							else:
 								print("unexpected: {0}".format(msg))
-
-				if len(self.players)>1:
-					running_state = True
-					for player in self.players:
-						if self.check_death(player):
-							running_state = False
-
-					send = []
-					for player in self.players:
-						self.players[player]['headlog'].append(self.players[player]['pos'])
-						print(self.players[player]['headlog'])
-						food = self.checkfood(player, food)
-						print(self.players[player]['countbits'])
-						self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:]
-						print(self.players[player]['snakelog'])
-						snake_pos_to_send = []
-						for position in self.players[player]['snakelog']:
-							snake_pos_to_send.append(str(position))
-						send.append(';'.join(snake_pos_to_send))
-					foodpos = str(food)
-					send.append(foodpos)
-					send.append(str(running_state))
-					msg = '|'.join(send)
-					print(msg)
-					for player in self.players:
-						self.listener.sendto(msg,player)
 		except KeyboardInterrupt as e:
 			pass
 

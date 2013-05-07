@@ -6,7 +6,7 @@ import re
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="10.41.64.161", serverport=9007):
+  def __init__(self, addr="10.41.64.143", serverport=9007):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # Bind to localhost - set to external ip to connect from other computers
@@ -83,7 +83,7 @@ class SnakeClient(object):
         #'Wait' function for discrete time?
         
         # select on specified file descriptors
-        readable, writable, exceptional=(sel.select(self.read_list, self.write_list, []))
+        readable, writable, exceptional=(sel.select(self.read_list, self.write_list, [],0.1))
         for f in readable:
           if f is self.conn: #if a packet is received
             msg, addr = f.recvfrom(4096)
