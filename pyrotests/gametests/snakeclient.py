@@ -117,17 +117,18 @@ class SnakeClient(object):
             self.food_box.pos = vector(int(positions[0]),int(positions[1]))
             # except:
             #   pass  # If something goes wrong, don't draw anything.
-        key = self.scene.kb.getkey()
-        if key == 'left':
-          self.conn.sendto('ua',(self.addr, self.serverport))
-        if key == 'right':
-          self.conn.sendto('ub',(self.addr, self.serverport))
-        if key == 'up':
-          self.conn.sendto('uc',(self.addr, self.serverport))
-        if key == 'down':
-          self.conn.sendto('ud',(self.addr, self.serverport))
-        if key == 'q':
-          running = False
+        if self.scene.kb.keys:
+          key = self.scene.kb.getkey()
+          if key == 'left':
+            self.conn.sendto('ua',(self.addr, self.serverport))
+          if key == 'right':
+            self.conn.sendto('ub',(self.addr, self.serverport))
+          if key == 'up':
+            self.conn.sendto('uc',(self.addr, self.serverport))
+          if key == 'down':
+            self.conn.sendto('ud',(self.addr, self.serverport))
+          if key == 'q':
+            running = False
     finally:
       self.conn.sendto("d", (self.addr, self.serverport))
 
