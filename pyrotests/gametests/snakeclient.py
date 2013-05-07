@@ -75,9 +75,8 @@ class SnakeClient(object):
     time.sleep(.1)
     # Initialize connection to server
     self.conn.sendto("c", (self.addr, self.serverport))
-    localip, localport = self.conn.getsockname()
-    print(localip,localport)
-    print(type(localport))
+    # localip, localport = self.conn.getsockname()
+    # print(localip,localport)
     while running:
       #'Wait' function for discrete time?
       
@@ -114,19 +113,16 @@ class SnakeClient(object):
           #print(positions)
           self.food_box.pos = vector(int(positions[0]),int(positions[1]))
           running_state = messages[3]
-          if running_state == 'run':
+          if running_state == True:
             pass
-          elif running_state == str(localport):
-            print(running_state)
-            print('and you are')
-            print(localport)
-            loss_text = label(text='You Lose!', align='center',pos=[0,0],height=30,color=color.red)
-            running = False
+          # elif running_state == str(localport):
+          #   print(running_state)
+          #   print('and you are')
+          #   print(localport)
+          #   loss_text = label(text='You Lose!', align='center',pos=[0,0],height=30,color=color.red)
+          #   running = False
           else:
-            print(running_state)
-            print('and you are')
-            print(localport)
-            loss_text = label(text='You Win!', align='center',pos=[0,0],height=30,color=color.red)
+            loss_text = label(text='Game Over!', align='center',pos=[0,0],height=30,color=color.red)
             running = False
           # except:
           #   pass  # If something goes wrong, don't draw anything.

@@ -78,8 +78,7 @@ class SnakeServer(object):
 					for player in self.players:
 						self.change_pos(player)
 						if self.check_death(player):
-							print(player[1])
-							running_state = player[1]
+							running_state = False
 
 					send = []
 					for player in self.players:
