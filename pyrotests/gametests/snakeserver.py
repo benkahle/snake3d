@@ -96,7 +96,6 @@ class SnakeServer(object):
 					msg = '|'.join(send)
 					print(msg)
 					for player in self.players:
-						#print(player)
 						self.listener.sendto(msg,player)
 
 				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[],0.1))
