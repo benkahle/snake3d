@@ -6,7 +6,7 @@ import re
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="10.41.64.143", serverport=9007):
+  def __init__(self, addr="10.41.64.143", serverport=9006):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # Bind to localhost - set to external ip to connect from other computers
@@ -74,11 +74,12 @@ class SnakeClient(object):
 
   def run(self):
     running = True
-
     try:
       time.sleep(.1)
       # Initialize connection to server
       self.conn.sendto("c", (self.addr, self.serverport))
+      localip, localport = self.conn.getsockname()
+      #print(self.meip,self.meport)
       while running:
         #'Wait' function for discrete time?
         
@@ -117,7 +118,7 @@ class SnakeClient(object):
             running_state = messages[3]
             if running_state == 'run':
               pass
-            elif running_state == self.clientport:
+            elif running_state == localport:
               loss_text = label(text='You Lose!', align='center',pos=[0,0],height=30,color=color.red)
               running = False
             else:
