@@ -62,7 +62,7 @@ class SnakeServer(object):
 	def checkfood(self, player, food):
 		n=3
 		if abs(self.players[player]['pos'][0]-food[0])<=n and abs(self.players[player]['pos'][1]-food[1])<=n: # and abs(snake.pos[2]-food.pos[2])<=n:
-			food = [random.randint(-96,96),random.randint(-96,96)]
+			food = (random.randint(-96,96),random.randint(-96,96))
 			self.players[player]['countbits']+=1
            #@snakeybits.append(str(countbits))
             #item=box(pos=self.players[player][headlog][-200*int(self.players[player][countbits])], length=4, width=4, height=4, color=snake.color)

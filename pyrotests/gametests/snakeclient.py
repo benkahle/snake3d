@@ -60,14 +60,14 @@ class SnakeClient(object):
 
   def make_snake(self,coords,player):
     if player == 'p1':
-      item = box(pos=coords[-1],length=4,width=4,height=4,color=color.red)
       if len(coords) > len(self.p1_boxes):
+        item = box(pos=coords[-1],length=4,width=4,height=4,color=color.red)
         self.p1_boxes.append(item)
       for snake_box in self.p1_boxes:
         snake_box.pos = coords[-(self.p1_boxes.index(snake_box))]
     if player == 'p2': 
-      item = box(pos=coords[-1],length=4,width=4,height=4,color=color.green)
       if len(coords) > len(self.p2_boxes):
+        item = box(pos=coords[-1],length=4,width=4,height=4,color=color.green)
         self.p2_boxes.append(item)
       for snake_box in self.p2_boxes:
         snake_box.pos = coords[-(self.p2_boxes.index(snake_box))]
@@ -109,11 +109,10 @@ class SnakeClient(object):
             self.make_snake(p2_coords,'p2')
             position = messages[2] #food
             position = re.sub('[\(\)]','',position)
-            print(position)
             positions = []
             for i in position.split(','):
               positions.append(i)
-            print(positions)
+            #print(positions)
             self.food_box.pos = vector(int(positions[0]),int(positions[1]))
             # except:
             #   pass  # If something goes wrong, don't draw anything.
