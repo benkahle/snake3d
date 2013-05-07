@@ -34,7 +34,6 @@ class SnakeServer(object):
 			pass
 			#set V(z-)
 		self.players[player]['velocity']=vel
-		self.change_pos(player)
 
 	def change_pos(self,player):
 		pos=self.players[player]['pos']
@@ -54,7 +53,7 @@ class SnakeServer(object):
 			n =2
     		for person in self.players:
 				for i in range(1,self.players[person]['countbits']):
-					position=self.players[person][headlog][int(i)]
+					position=self.players[person]['headlog'][int(i)]
 					if abs(self.players[person]['pos'][0] - position[0])<=n and abs(self.players[person]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
 						return False
 					else: 
@@ -75,18 +74,16 @@ class SnakeServer(object):
 		try:
 			while True:
 				if len(self.players)>1:
-					running_state = True
+					running_state = 'run'
 					for player in self.players:
 						self.change_pos(player)
 						if self.check_death(player):
-							running_state = False
+							running_state = player[1]
 
 					send = []
 					for player in self.players:
 						self.players[player]['headlog'].append(self.players[player]['pos'])
-						#print(self.players[player]['headlog'])
 						food = self.checkfood(player, food)
-						#print(self.players[player]['countbits'])
 						self.players[player]['snakelog'] = self.players[player]['headlog'][-self.players[player]['countbits']:]
 						print(self.players[player]['snakelog'])
 						snake_pos_to_send = []
@@ -100,6 +97,7 @@ class SnakeServer(object):
 					msg = '|'.join(send)
 					print(msg)
 					for player in self.players:
+						print(player)
 						self.listener.sendto(msg,player)
 
 				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[],0.1))

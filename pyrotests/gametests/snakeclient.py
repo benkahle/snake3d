@@ -86,8 +86,8 @@ class SnakeClient(object):
         readable, writable, exceptional=(sel.select(self.read_list, self.write_list, [],0.1))
         for f in readable:
           if f is self.conn: #if a packet is received
-            msg, addr = f.recvfrom(4096)
-            print(msg,addr)
+            msg, sentaddr = f.recvfrom(4096)
+            print(msg,sentaddr)
             messages = []
             for inner_message in msg.split('|'):
               messages.append(inner_message)
@@ -114,6 +114,15 @@ class SnakeClient(object):
               positions.append(i)
             #print(positions)
             self.food_box.pos = vector(int(positions[0]),int(positions[1]))
+            running_state = messages[3]
+            if running_state == 'run':
+              pass
+            elif running_state == self.clientport:
+              loss_text = label(text='You Lose!', align='center',pos=[0,0],height=30,color=color.red)
+              running = False
+            else:
+              loss_text = label(text='You Win!', align='center',pos=[0,0],height=30,color=color.red)
+              running = False
             # except:
             #   pass  # If something goes wrong, don't draw anything.
         if self.scene.kb.keys:
@@ -128,8 +137,7 @@ class SnakeClient(object):
             self.conn.sendto('ud',(self.addr, self.serverport))
           if key == 'q':
             running = False
-    finally:
-      self.conn.sendto("d", (self.addr, self.serverport))
+        self.conn.sendto("d", (self.addr, self.serverport))
 
 
 if __name__ == "__main__":
