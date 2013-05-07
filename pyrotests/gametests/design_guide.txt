@@ -18,4 +18,4 @@
 
 5. Networking:
 
-	There is a server that runs the game and then two clients that connect to them. The server has no visual python, but does all of the calculations as to how many bits there are, the location of the snake, if anyone died and the food. The server then sends a message with this information to the clients, who then just draw using visual python what is going on. The client then sends a message back to the server if there is a key input.
+	There is a server that runs the game and then two clients that connect to the server. The server does not use Visual Python, but does all of the calculations as to how many bits there are, the location of the snakes, game status (eg if anyone has won), and the food tallies of each snake. The server then sends a message with this information to the clients, who use Visual Python to display the current game state. The client then sends a message back to the server if there is any key input and the cycle is repeated.
