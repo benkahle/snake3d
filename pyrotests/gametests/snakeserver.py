@@ -41,12 +41,12 @@ class SnakeServer(object):
 		pos = (pos[0] + vel[0],pos[1]+vel[1])
 		self.players[player]['pos']=pos
 
-	def check_death(self,player):
+	def is_dead(self,player):
 		pos = self.players[player]['pos']
 		if pos[0]<= -100 or pos[0]>= 100:
-			return False
+			return True
 		elif pos[1]<= -100 or pos[1]>= 100:
-			return False
+			return True
 		# elif snake[2]<= -100 or snake[2]>= 100:
 			#return False
 		else:
@@ -55,9 +55,9 @@ class SnakeServer(object):
 				for i in range(1,self.players[person]['countbits']):
 					position=self.players[person]['snakelog'][int(i)]
 					if abs(self.players[person]['pos'][0] - position[0])<=n and abs(self.players[person]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
-						return False
-					else: 
 						return True
+					else: 
+						return False
 	def checkfood(self, player, food):
 		n=3
 		if abs(self.players[player]['pos'][0]-food[0])<=n and abs(self.players[player]['pos'][1]-food[1])<=n: # and abs(snake.pos[2]-food.pos[2])<=n:
@@ -77,7 +77,7 @@ class SnakeServer(object):
 					running_state = True
 					for player in self.players:
 						self.change_pos(player)
-						if self.check_death(player):
+						if self.is_dead(player):
 							running_state = False
 
 					send = []
