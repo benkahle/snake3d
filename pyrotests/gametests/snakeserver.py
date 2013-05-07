@@ -19,13 +19,13 @@ class SnakeServer(object):
 		vel=self.players[player]['velocity']
 		if mv == ' ':
 			vel == vel
-		if mv == 'a':
+		if mv == 'a' and vel != (2,0):
 			vel = (-2,0)
-		if mv == 'b':
+		if mv == 'b' and vel != (-2,0):
 			vel = (2,0)
-		if mv == 'c':
+		if mv == 'c' and vel != (0,-2):
 			vel = (0,2)
-		if mv == 'd':
+		if mv == 'd' and vel != (0,2):
 			vel = (0,-2)
 		if mv == 'e':
 			#set V(z+)
@@ -50,12 +50,15 @@ class SnakeServer(object):
 		# elif snake[2]<= -100 or snake[2]>= 100:
 			#return False
 		else:
-			n =2
+			n=2
     		for person in self.players:
-				for i in range(1,self.players[person]['countbits']):
-					position=self.players[person]['snakelog'][int(i)]
-					if abs(self.players[person]['pos'][0] - position[0])<=n and abs(self.players[person]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
-						return True
+    			for position in self.players[person]['snakelog'][3:]:
+    				if self.players[person]['pos'] == position:
+    					return True
+				# for i in range(5,self.players[person]['countbits']-1):
+				# 	position=self.players[person]['snakelog'][int(i)]
+				# 	if abs(self.players[person]['pos'][0] - position[0])<=n and abs(self.players[person]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
+				# 		return True
 					else: 
 						return False
 	def checkfood(self, player, food):
@@ -63,9 +66,6 @@ class SnakeServer(object):
 		if abs(self.players[player]['pos'][0]-food[0])<=n and abs(self.players[player]['pos'][1]-food[1])<=n: # and abs(snake.pos[2]-food.pos[2])<=n:
 			food = (random.randint(-96,96),random.randint(-96,96))
 			self.players[player]['countbits']+=1
-           #@snakeybits.append(str(countbits))
-            #item=box(pos=self.players[player][headlog][-200*int(self.players[player][countbits])], length=4, width=4, height=4, color=snake.color)
-           # self.players[player][bit_objects].append(item)
 		return food
 
 	def run(self):
