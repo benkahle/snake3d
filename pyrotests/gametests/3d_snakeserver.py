@@ -5,9 +5,9 @@ import random
 import math
 from visual import *
 class SnakeServer(object):
-	def __init__(self,port = 9006):
+	def __init__(self,port = 9008):
 		self.listener = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		self.listener.bind(('10.41.64.143',9006))
+		self.listener.bind(('10.41.64.143',9008))
 		self.read_list = [self.listener] #receiving client packets here
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
@@ -97,7 +97,6 @@ class SnakeServer(object):
 						msg,addr = f.recvfrom(32)
 						if len(msg) >= 1:
 							cmd = msg[0]
-							print(msg)
 							if cmd == 'c': #New connection
 								self.players[addr] = {'pos':(random.randint(-50,50),random.randint(-50,50),random.randint(-50,50)), 'velocity':(0,0,0), 'headlog':[], 'countbits':1, 'snakepos':[]} 
 							elif cmd == 'u': #Movement update
