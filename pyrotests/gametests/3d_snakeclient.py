@@ -32,14 +32,14 @@ class SnakeClient(object):
 			if len(coords) > len(self.p1_boxes):
 				item = box(pos=coords[-1],length=3,width=3,height=3,color=color.red)
 				self.p1_boxes.append(item)
-				for snake_box in self.p1_boxes:
-					snake_box.pos = coords[-(self.p1_boxes.index(snake_box))]
+			for snake_box in self.p1_boxes:
+				snake_box.pos = coords[-(self.p1_boxes.index(snake_box))]
 		if player == 'p2': 
 			if len(coords) > len(self.p2_boxes):
 				item = box(pos=coords[-1],length=3,width=3,height=3,color=color.green)
 				self.p2_boxes.append(item)
-				for snake_box in self.p2_boxes:
-					snake_box.pos = coords[-(self.p2_boxes.index(snake_box))]
+			for snake_box in self.p2_boxes:
+				snake_box.pos = coords[-(self.p2_boxes.index(snake_box))]
 
 	def run(self):
 		running = True
@@ -65,13 +65,13 @@ class SnakeClient(object):
 						positions = []
 						for i in position.split(','):
 							positions.append(i)
-					p1_coords.append(vector(int(positions[0]),int(positions[1]),int(positions[2])))
+						p1_coords.append(vector(int(positions[0]),int(positions[1]),int(positions[2])))
 					for position in messages[1].split(';'): #snake '2'
 						position = re.sub('[\(\)]','',position)
 						positions = []
 						for i in position.split(','):
 							positions.append(i)
-					p2_coords.append(vector(int(positions[0]),int(positions[1]),int(positions[2])))
+						p2_coords.append(vector(int(positions[0]),int(positions[1]),int(positions[2])))
 					self.make_snake(p1_coords,'p1')
 					self.make_snake(p2_coords,'p2')
 					position = messages[2] #food
