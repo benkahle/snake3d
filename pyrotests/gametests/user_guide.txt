@@ -1,0 +1,14 @@
+						User Guide
+
+Once you have installed the requisite libraries (see installation_guide.txt), you can start playing the game! Here's how...
+
+Command Line Interface:
+
+	First, make sure you've changed directories to the one to which you unzipped the game file.
+
+	Next, type "cd /pyrotests/gametests"
+
+	Then, type "python2 initiateplay.py"
+
+	The game should start automatically. Follow on-screen directions from there.
+
