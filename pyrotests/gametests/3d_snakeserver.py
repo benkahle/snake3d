@@ -98,6 +98,7 @@ class SnakeServer(object):
 						if len(msg) >= 1:
 							cmd = msg[0]
 							if cmd == 'c': #New connection
+								print('New Connection Established...')
 								self.players[addr] = {'pos':(random.randint(-50,50),random.randint(-50,50),random.randint(-50,50)), 'velocity':(0,0,0), 'headlog':[], 'countbits':1, 'snakepos':[]} 
 							elif cmd == 'u': #Movement update
 								if len(msg) >= 2 and addr in self.players:
