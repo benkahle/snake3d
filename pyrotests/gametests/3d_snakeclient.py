@@ -22,6 +22,10 @@ class SnakeClient(object):
 		self.scene.autoscale = False
 		self.p1_boxes = []
 		self.p2_boxes = []
+		self.zbox1 = curve(pos=[(-100,-100,0),(100,-100,0),(100,100,0),(-100,100,0),(-100,-100,0)],color=color.magenta)
+		self.ybox1 = curve(pos=[(100,0,100),(100,0,-100),(-100,0,-100),(-100,0,100),(100,0,100)], color=color.magenta)
+		self.zbox2 = curve(pos=[(-100,-100,0),(100,-100,0),(100,100,0),(-100,100,0),(-100,-100,0)],color=color.yellow)
+		self.ybox2 = curve(pos=[(100,0,100),(100,0,-100),(-100,0,-100),(-100,0,100),(100,0,100)], color=color.yellow)
 		# self.idx = box(pos=(20,0,0),length=3,width=3,height=3, color=color.red)
 		# self.idy = box(pos=(0,20,0),length=3,width=3,height=3, color=color.green)
 		# self.idz = box(pos=(0,0,100),length=3,width=3,height=3, color=color.blue)
@@ -40,6 +44,10 @@ class SnakeClient(object):
 				self.p2_boxes.append(item)
 			for snake_box in self.p2_boxes:
 				snake_box.pos = coords[-(self.p2_boxes.index(snake_box))]
+
+	def zboxmove(self,coords, zbox, ybox):
+		zbox.pos = [(-100,-100,coords[0][2]),(100,-100,coords[0][2]),(100,100,coords[0][2]),(-100,100,coords[0][2]),(-100,-100,coords[0][2])]
+		ybox.pos = [(-100,coords[0][1],-100),(100,coords[0][1],-100),(100,coords[0][1],100),(-100,coords[0][1],100),(-100,coords[0][1],-100)]
 
 	def run(self):
 		running = True
@@ -73,7 +81,9 @@ class SnakeClient(object):
 							positions.append(i)
 						p2_coords.append(vector(int(positions[0]),int(positions[1]),int(positions[2])))
 					self.make_snake(p1_coords,'p1')
+					self.zboxmove(p1_coords,self.zbox1,self.ybox1)
 					self.make_snake(p2_coords,'p2')
+					self.zboxmove(p2_coords,self.zbox2,self.ybox2)
 					position = messages[2] #food
 					position = re.sub('[\(\)]','',position)
 					positions = []
