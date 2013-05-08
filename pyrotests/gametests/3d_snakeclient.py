@@ -26,10 +26,12 @@ class SnakeClient(object):
 		self.ybox1 = curve(pos=[(100,0,100),(100,0,-100),(-100,0,-100),(-100,0,100),(100,0,100)], color=color.magenta)
 		self.zbox2 = curve(pos=[(-100,-100,0),(100,-100,0),(100,100,0),(-100,100,0),(-100,-100,0)],color=color.yellow)
 		self.ybox2 = curve(pos=[(100,0,100),(100,0,-100),(-100,0,-100),(-100,0,100),(100,0,100)], color=color.yellow)
+		self.zbox3 = curve(pos=[(-100,-100,0),(100,-100,0),(100,100,0),(-100,100,0),(-100,-100,0)],color=color.cyan)
+		self.ybox3 = curve(pos=[(100,0,100),(100,0,-100),(-100,0,-100),(-100,0,100),(100,0,100)], color=color.cyan)
 		# self.idx = box(pos=(20,0,0),length=3,width=3,height=3, color=color.red)
 		# self.idy = box(pos=(0,20,0),length=3,width=3,height=3, color=color.green)
 		# self.idz = box(pos=(0,0,100),length=3,width=3,height=3, color=color.blue)
-		self.food_box = box(pos=(100,100,100),length=4,width=4,height=4,color=color.cyan)
+		self.food_box = sphere(pos=(100,100,100),length=3,width=3,height=3,color=color.cyan)
 
 	def make_snake(self,coords,player):
 		if player == 'p1':
@@ -46,8 +48,12 @@ class SnakeClient(object):
 				snake_box.pos = coords[-(self.p2_boxes.index(snake_box))]
 
 	def zboxmove(self,coords, zbox, ybox):
-		zbox.pos = [(-100,-100,coords[0][2]),(100,-100,coords[0][2]),(100,100,coords[0][2]),(-100,100,coords[0][2]),(-100,-100,coords[0][2])]
-		ybox.pos = [(-100,coords[0][1],-100),(100,coords[0][1],-100),(100,coords[0][1],100),(-100,coords[0][1],100),(-100,coords[0][1],-100)]
+		zbox.pos = [(-100,-100,coords[-1][2]),(100,-100,coords[-1][2]),(100,100,coords[-1][2]),(-100,100,coords[-1][2]),(-100,-100,coords[-1][2])]
+		ybox.pos = [(-100,coords[-1][1],-100),(100,coords[-1][1],-100),(100,coords[-1][1],100),(-100,coords[-1][1],100),(-100,coords[-1][1],-100)]
+
+	def foodzboxmove(self,coords):
+		self.zbox3.pos = [(-100,-100,coords[2]),(100,-100,coords[2]),(100,100,coords[2]),(-100,100,coords[2]),(-100,-100,coords[2])]
+		self.ybox3.pos = [(-100,coords[1],-100),(100,coords[1],-100),(100,coords[1],100),(-100,coords[1],100),(-100,coords[1],-100)]
 
 	def run(self):
 		running = True
@@ -89,7 +95,9 @@ class SnakeClient(object):
 					positions = []
 					for i in position.split(','):
 						positions.append(i)
-					self.food_box.pos = vector(int(positions[0]),int(positions[1]),int(positions[2]))
+					food_loc = vector(int(positions[0]),int(positions[1]),int(positions[2]))
+					self.food_box.pos = food_loc
+					self.foodzboxmove(food_loc)
 					running_state = messages[3]
 					if running_state == 'True':
 						pass

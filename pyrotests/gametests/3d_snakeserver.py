@@ -17,7 +17,7 @@ class SnakeServer(object):
 
 	def do_movement(self,mv,player):
 		vel=self.players[player]['velocity']
-		speed = int(math.ceil(.2*self.players[player]['countbits']+3))
+		speed = int(math.ceil(.2*self.players[player]['countbits']+2))
 		if mv == ' ':
 			vel == vel
 		if mv == 'a' and vel != (speed,0,0): #left
@@ -52,21 +52,19 @@ class SnakeServer(object):
 			n=2
 			for meta_person in self.players:
 				for position in self.players[meta_person]['snakepos'][1:]:
-					if self.point_distance(self.players[player]['pos'],position) < 2:
+					if self.point_distance(self.players[player]['pos'],position) < 3:
 						return True
 			return False
 
 	def checkfood(self, player, food):
-		n=3
-		#if abs(self.players[player]['pos'][0]-food[0])<=n and abs(self.players[player]['pos'][1]-food[1])<=n: # and abs(snake.pos[2]-food.pos[2])<=n:
-		if self.point_distance(self.players[player]['pos'],food) < 2:
-			food = (random.randint(-96,96),random.randint(-96,96),random.randint(-96,96))
+		if self.point_distance(self.players[player]['pos'],food) < 5:
+			food = (random.randint(-90,90),random.randint(-90,90),random.randint(-90,90))
 			self.players[player]['countbits']+=1
 		return food
 
 	def run(self):
 		print('waiting...')
-		food = (random.randint(-96,96),random.randint(-96,96),random.randint(-96,96))
+		food = (random.randint(-90,90),random.randint(-90,90),random.randint(-90,90))
 		try:
 			while True:
 				if len(self.players)>1:
