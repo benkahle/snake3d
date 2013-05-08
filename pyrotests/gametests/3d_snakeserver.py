@@ -12,34 +12,32 @@ class SnakeServer(object):
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
 
-	def point_distance(self,p0,p1):
-		return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
+	def point_distance(self,p0,p1,):
+		return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2 + (p0[2] - p1[2])**2)
 
 	def do_movement(self,mv,player):
 		vel=self.players[player]['velocity']
 		speed = int(math.ceil(.2*self.players[player]['countbits']+3))
 		if mv == ' ':
 			vel == vel
-		if mv == 'a' and vel != (speed,0):
-			vel = (-speed,0)
-		if mv == 'b' and vel != (-speed,0):
-			vel = (speed,0)
-		if mv == 'c' and vel != (0,-speed):
-			vel = (0,speed)
-		if mv == 'd' and vel != (0,speed):
-			vel = (0,-speed)
-		if mv == 'e':
-			#set V(z+)
-			pass
-		if mv == 'f':
-			pass
-			#set V(z-)
+		if mv == 'a' and vel != (speed,0,0): #left
+			vel = (-speed,0,0)
+		if mv == 'b' and vel != (-speed,0,0): #right
+			vel = (speed,0,0)
+		if mv == 'c' and vel != (0,-speed,0): #up
+			vel = (0,speed,0)
+		if mv == 'd' and vel != (0,speed,0): #down
+			vel = (0,-speed,0)
+		if mv == 'e' and vel != (0,0,speed): #in
+			vel = (0,0,-speed)
+		if mv == 'f' and vel != (0,0,-speed): #out
+			vel = (0,0,speed)
 		self.players[player]['velocity']=vel
 
 	def change_pos(self,player):
 		pos=self.players[player]['pos']
 		vel = self.players[player]['velocity']
-		pos = (pos[0] + vel[0],pos[1]+vel[1])
+		pos = (pos[0]+vel[0], pos[1]+vel[1], pos[2]+vel[2])
 		self.players[player]['pos']=pos
 
 	def is_dead(self,player):
@@ -48,8 +46,8 @@ class SnakeServer(object):
 			return True
 		elif pos[1]<= -100 or pos[1]>= 100:
 			return True
-		# elif snake[2]<= -100 or snake[2]>= 100:
-			#return False
+		elif pos[2]<= -100 or pos[2]>= 100:
+			return True
 		else:
 			n=2
 			for meta_person in self.players:
@@ -57,16 +55,18 @@ class SnakeServer(object):
 					if self.point_distance(self.players[player]['pos'],position) < 2:
 						return True
 			return False
+
 	def checkfood(self, player, food):
 		n=3
-		if abs(self.players[player]['pos'][0]-food[0])<=n and abs(self.players[player]['pos'][1]-food[1])<=n: # and abs(snake.pos[2]-food.pos[2])<=n:
-			food = (random.randint(-96,96),random.randint(-96,96))
+		#if abs(self.players[player]['pos'][0]-food[0])<=n and abs(self.players[player]['pos'][1]-food[1])<=n: # and abs(snake.pos[2]-food.pos[2])<=n:
+		if self.point_distance(self.players[player]['pos'],food) < 2:
+			food = (random.randint(-96,96),random.randint(-96,96),random.randint(-96,96))
 			self.players[player]['countbits']+=1
 		return food
 
 	def run(self):
 		print('waiting...')
-		food = (random.randint(-96,96),random.randint(-96,96))
+		food = (random.randint(-96,96),random.randint(-96,96),random.randint(-96,96))
 		try:
 			while True:
 				if len(self.players)>1:
@@ -101,7 +101,7 @@ class SnakeServer(object):
 							cmd = msg[0]
 							print(msg)
 							if cmd == 'c': #New connection
-								self.players[addr] = {'pos':(random.randint(-50,50),random.randint(-50,50)), 'velocity':(0,0), 'headlog':[], 'countbits':1, 'snakepos':[]} 
+								self.players[addr] = {'pos':(random.randint(-50,50),random.randint(-50,50),random.randint(-50,50)), 'velocity':(0,0,0), 'headlog':[], 'countbits':1, 'snakepos':[]} 
 							elif cmd == 'u': #Movement update
 								if len(msg) >= 2 and addr in self.players:
 									self.do_movement(msg[1],addr)
