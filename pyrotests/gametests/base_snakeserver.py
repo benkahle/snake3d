@@ -11,25 +11,23 @@ class SnakeServer(object):
 		self.read_list = [self.listener] #receiving client packets here
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
-		# self.headlog = {}  #list of positions of past 
-		# self.countbits = {} #number of bits which this snake has eaten
-		# self.bit_objects = {}
 
 	def point_distance(self,p0,p1):
 		return math.sqrt((p0[0] - p1[0])**2 + (p0[1] - p1[1])**2)
 
 	def do_movement(self,mv,player):
 		vel=self.players[player]['velocity']
+		speed = int(math.ceil(.2*self.players[player]['countbits']+3))
 		if mv == ' ':
 			vel == vel
-		if mv == 'a' and vel != (4,0):
-			vel = (-4,0)
-		if mv == 'b' and vel != (-4,0):
-			vel = (4,0)
-		if mv == 'c' and vel != (0,-4):
-			vel = (0,4)
-		if mv == 'd' and vel != (0,4):
-			vel = (0,-4)
+		if mv == 'a' and vel != (speed,0):
+			vel = (-speed,0)
+		if mv == 'b' and vel != (-speed,0):
+			vel = (speed,0)
+		if mv == 'c' and vel != (0,-speed):
+			vel = (0,speed)
+		if mv == 'd' and vel != (0,speed):
+			vel = (0,-speed)
 		if mv == 'e':
 			#set V(z+)
 			pass
@@ -54,15 +52,10 @@ class SnakeServer(object):
 			#return False
 		else:
 			n=2
-			for position in self.players[player]['snakepos'][3:]:
-				print(self.players[player]['pos'])
-				print(position)
-				if self.point_distance(self.players[player]['pos'],position) < 3:
-					return True
-				# for i in range(5,self.players[person]['countbits']-1):
-				# 	position=self.players[person]['snakelog'][int(i)]
-				# 	if abs(self.players[person]['pos'][0] - position[0])<=n and abs(self.players[person]['pos'][1] - position[1])<=n:# and abs(snake.pos[2] - i.pos[2])<=n:
-				# 		return True
+			for meta_person in self.players:
+				for position in self.players[meta_person]['snakepos'][1:]:
+					if self.point_distance(self.players[player]['pos'],position) < 2:
+						return True
 			return False
 	def checkfood(self, player, food):
 		n=3
@@ -100,7 +93,7 @@ class SnakeServer(object):
 					for player in self.players:
 						self.listener.sendto(msg,player)
 
-				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[],0.1))
+				readable,writable,exceptional = (sel.select(self.read_list,self.write_list,[],0.075))
 				for f in readable:
 					if f is self.listener:
 						msg,addr = f.recvfrom(32)
