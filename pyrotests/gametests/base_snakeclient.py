@@ -19,8 +19,8 @@ class SnakeClient(object):
   def setup_game(self):
     #Setup vpython game world here
     self.scene = display(title='Super-Mega Snake Game', width=750, height=775)
-    welcome = label(text='Welcome to Super-Mega Snake Game!',align='center',pos=(0,0,0), yoffset= 60, height = 25)
-    welcome_purple = label(text = 'When both players are ready, use arrow keys to control movement of snake. \nThe snake dies if it hits the wall, itself or the other snake. \nWin by staying alive.',pos=(0,0,0), color = color.magenta, align = 'center')
+    self.welcome = label(text='Welcome to Super-Mega Snake Game!',align='center',pos=(0,0,0), yoffset= 60, height = 25)
+    self.welcome_purple = label(text = 'When both players are ready, use arrow keys to control movement of snake. \nThe snake dies if it hits the wall, itself or the other snake. \nWin by staying alive.',pos=(0,0,0), color = color.magenta, align = 'center')
     self.border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100),(-100,-100)])
     self.scene.autoscale = False
     #self.snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
@@ -55,7 +55,7 @@ class SnakeClient(object):
       for f in readable:
         if f is self.conn: #if a packet is received
           msg, sentaddr = f.recvfrom(4096)
-          print(msg,sentaddr)
+          #print(msg,sentaddr)
           messages = []
           for inner_message in msg.split('|'):
             messages.append(inner_message)
@@ -97,6 +97,8 @@ class SnakeClient(object):
           # except:
           #   pass  # If something goes wrong, don't draw anything.
       if self.scene.kb.keys:
+        self.welcome.visible = False
+        self.welcome_purple.visible = False
         key = self.scene.kb.getkey()
         if key == 'left':
           self.conn.sendto('ua',(self.addr, self.serverport))

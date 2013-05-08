@@ -68,7 +68,7 @@ class SnakeClient(object):
 			for f in readable:
 				if f is self.conn: #if a packet is received
 					msg, sentaddr = f.recvfrom(16384)
-					print(msg,sentaddr)
+					#print(msg,sentaddr)
 					messages = []
 					for inner_message in msg.split('|'):
 						messages.append(inner_message)
