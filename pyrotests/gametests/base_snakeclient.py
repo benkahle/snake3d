@@ -6,7 +6,7 @@ import re
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="10.41.64.143", serverport=9006):
+  def __init__(self, addr="10.41.64.143", serverport=55555):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.addr = addr
@@ -19,6 +19,8 @@ class SnakeClient(object):
   def setup_game(self):
     #Setup vpython game world here
     self.scene = display(title='Super-Mega Snake Game', width=750, height=775)
+    welcome = label(text='Welcome to Super-Mega Snake Game!',align='center',pos=(0,0,0), yoffset= 60, height = 25)
+    welcome_purple = label(text = 'When both players are ready, use arrow keys to control movement of snake. \nThe snake dies if it hits the wall, itself or the other snake. \nWin by staying alive.',pos=(0,0,0), color = color.magenta, align = 'center')
     self.border = curve(pos=[(-100,-100),(100,-100),(100,100),(-100,100),(-100,-100)])
     self.scene.autoscale = False
     #self.snake = box(pos=(0,0,0), length=4, width=4, height=4, color=color.red)
