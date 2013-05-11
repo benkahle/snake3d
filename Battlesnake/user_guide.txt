@@ -12,3 +12,9 @@ Command Line Interface:
 
 	The game should start automatically. Follow on-screen directions from there.
 
+	Networked Game Notes:
+	In order to play the network games on a new computer, first open the client and server scripts
+	(There are different scripts for the 2D and 3D versions) and edit the references to an IP address (2 in server, 1 in client)
+	to your host computer's IP address. On a linux system, this can be determined by running 'ifconfig' from a terminal.
+	Once the IP addresses have been changed, the programs can be run as described above.
+
