@@ -10,6 +10,6 @@ Files contained in this folder:
 
 	4. self_evaluation.txt -- A self-evaluation of our group's work over the course of this project.
 
-	5. sc1.png-sc5.png -- A few screenshots demonstrating the game's function. Feel free to blow them up into posters for your wall, photo-shop yourself into them and pretend that you're in Tron, or use them as inspiration for a totally rad series of tattoos.
+	5. sc1.png-sc5.png -- A few screenshots demonstrating the game's function.
 
 	6. All other files (.py and .pyc) -- Python scripts necessary for game function.
