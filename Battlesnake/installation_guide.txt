@@ -1,0 +1,16 @@
+						Installation Guide
+
+Before you play the game, you must make sure that your computer is ready. These instructions are written for Ubuntu, and are known to work for versions 12.04 and 12.10. First, you must have Python 2.7 installed. If you don't, here's how to get it...
+
+In the command line, type "sudo apt-get install python2.7"
+
+Enter your sudo password, and wait for the install to finish.
+Next, you must install Visual Python or if you already have it make sure that you have the latest version. Here's how...
+
+In the command line, type "sudo apt-get install python-visual"
+
+To correct an installation problem with Visual Python, it is also necessary to install a dependency.  
+
+In the command line, type "sudo apt-get install libgtkglextmm-x11-1.2-dev" 
+
+Now you're ready to play! Follow the instructions in user_guide.py to get started.
