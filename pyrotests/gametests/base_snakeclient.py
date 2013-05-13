@@ -6,7 +6,7 @@ import re
 from visual import *
 
 class SnakeClient(object):
-  def __init__(self, addr="192.168.172.144", serverport=55556):
+  def __init__(self, addr="192.168.172.144", serverport=55558):
     self.clientport = random.randint(8000, 8999)
     self.conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.addr = addr

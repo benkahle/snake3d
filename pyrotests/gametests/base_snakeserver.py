@@ -5,9 +5,9 @@ import random
 import math
 from visual import *
 class SnakeServer(object):
-	def __init__(self,port = 55556):
+	def __init__(self,port = 55558):
 		self.listener = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-		self.listener.bind(('192.168.172.144',55556))
+		self.listener.bind(('192.168.172.144',55558))
 		self.read_list = [self.listener] #receiving client packets here
 		self.write_list = [] #List to send to clients
 		self.players = {} #stored position and velocity by address
