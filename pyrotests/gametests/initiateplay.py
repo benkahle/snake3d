@@ -38,8 +38,8 @@ while 1:
 		
 		#hosts
 		elif m.pos[0]>=1.1 and m.pos[0]<=8.53 and m.pos[1]>=-5.355 and m.pos[1]<=-4.3:
-			os.system('python base_snakeserver.py')
-			os.system('python base_snakeclient.py')
+			subprocess.call(['python', 'base_snakeserver.py'])
+			subprocess.call(['python', 'base_snakeclient.py'])
 		elif m.pos[0]>=1.1 and m.pos[0]<=8.53 and m.pos[1]>=-7.62 and m.pos[1]<=-6.567:		
-			os.system('python 3d_snakeserver.py')
-			os.system('python 3d_snakeclient.py')
+			subprocess.call(['python', '3d_snakeserver.py'])
+			subprocess.call(['python', '3d_snakeclient.py'])
